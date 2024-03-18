@@ -16,7 +16,6 @@ namespace TesseractDotnetWrapper.Interop
     /// </remarks>
     ///
 
-
     public class NativeTessApiSignatures
     {
         [DllImport(
