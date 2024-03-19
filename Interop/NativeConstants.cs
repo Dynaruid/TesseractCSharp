@@ -11,9 +11,9 @@ namespace TesseractDotnetWrapper.Interop
         public const string TesseractWinX64DllName = "tesseract/win_x64/tesseract53.dll";
 
         public const string LeptonicaMacosAArch64DllName =
-            "tesseract/macos_aarch64/libleptonica.6.0.0.dylib";
+            "tesseract/macos_aarch64/libleptonica.6.0.0";
         public const string TesseractMacosAArch64DllName =
-            "tesseract/macos_aarch64/libtesseract.5.3.4.dylib";
+            "tesseract/macos_aarch64/libtesseract.5.3.4";
         public const string LeptonicaLinuxX64DllName = "tesseract/win_x64/leptonica-1.84.1.dll";
         public const string TesseractLinuxX64DllName = "tesseract/win_x64/tesseract53.dll";
 

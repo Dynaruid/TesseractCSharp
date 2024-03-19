@@ -36,8 +36,8 @@ namespace TesseractDotnetWrapper.Interop
             else
             {
                 //macos
-                NativeTess = new NativeTessApiWindows();
-                NativeLeptonica = new NativeLeptonicaApiWindow();
+                NativeTess = new NativeTessApiMacos();
+                NativeLeptonica = new NativeLeptonicaApiMacos();
             }
         }
 
