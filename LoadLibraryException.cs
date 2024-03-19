@@ -8,11 +8,17 @@ namespace TesseractDotnetWrapper
     public class LoadLibraryException : SystemException
     {
         public LoadLibraryException() { }
-        public LoadLibraryException(string message) : base(message) { }
-        public LoadLibraryException(string message, Exception inner) : base(message, inner) { }
+
+        public LoadLibraryException(string message)
+            : base(message) { }
+
+        public LoadLibraryException(string message, Exception inner)
+            : base(message, inner) { }
+
         protected LoadLibraryException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
+            System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context
+        )
             : base(info, context) { }
     }
 }

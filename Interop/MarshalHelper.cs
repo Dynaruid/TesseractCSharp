@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TesseractDotnetWrapper.Interop
 {
-    unsafe static class MarshalHelper
+    static unsafe class MarshalHelper
     {
-    	public static IntPtr StringToPtr(string value, Encoding encoding)
+        public static IntPtr StringToPtr(string value, Encoding encoding)
         {
             var encoder = encoding.GetEncoder();
             var length = encoding.GetByteCount(value);
@@ -18,7 +18,6 @@ namespace TesseractDotnetWrapper.Interop
             return handle;
         }
 
-    	        
         public static string PtrToString(IntPtr handle, Encoding encoding)
         {
             var length = StrLength(handle);
@@ -30,19 +29,18 @@ namespace TesseractDotnetWrapper.Interop
         /// </summary>
         public static int StrLength(IntPtr handle)
         {
-            if(handle == IntPtr.Zero)
+            if (handle == IntPtr.Zero)
             {
                 return 0;
             }
 
             var ptr = (byte*)handle.ToPointer();
             int length = 0;
-            while (*(ptr + length) != 0) {
+            while (*(ptr + length) != 0)
+            {
                 length++;
             }
             return length;
         }
-
-
     }
 }

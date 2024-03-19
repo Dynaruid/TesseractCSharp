@@ -34,7 +34,7 @@ namespace TesseractDotnetWrapper
         }
 
         #endregion
-        
+
         #region Properties
 
         public int X1
@@ -77,13 +77,17 @@ namespace TesseractDotnetWrapper
 
         public bool Equals(Rect other)
         {
-            return this.x == other.x && this.y == other.y && this.width == other.width && this.height == other.height;
+            return this.x == other.x
+                && this.y == other.y
+                && this.width == other.width
+                && this.height == other.height;
         }
 
         public override int GetHashCode()
         {
             int hashCode = 0;
-            unchecked {
+            unchecked
+            {
                 hashCode += 1000000007 * x.GetHashCode();
                 hashCode += 1000000009 * y.GetHashCode();
                 hashCode += 1000000021 * width.GetHashCode();
@@ -102,16 +106,14 @@ namespace TesseractDotnetWrapper
             return !(lhs == rhs);
         }
         #endregion
-        
-        #region ToString
-        
-		public override string ToString()
-		{
-			return string.Format("[Rect X={0}, Y={1}, Width={2}, Height={3}]", x, y, width, height);
-		}
 
-        
+        #region ToString
+
+        public override string ToString()
+        {
+            return string.Format("[Rect X={0}, Y={1}, Width={2}, Height={3}]", x, y, width, height);
+        }
+
         #endregion
-        
     }
 }

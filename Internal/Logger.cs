@@ -9,22 +9,33 @@ namespace TesseractDotnetWrapper.Internal
 {
     static class Logger
     {
-		readonly static TraceSource trace = new TraceSource("Tesseract");
-        
+        static readonly TraceSource trace = new TraceSource("Tesseract");
 
         public static void TraceInformation(string format, params object[] args)
         {
-            trace.TraceEvent(TraceEventType.Information, 0, string.Format(CultureInfo.CurrentCulture, format, args));
+            trace.TraceEvent(
+                TraceEventType.Information,
+                0,
+                string.Format(CultureInfo.CurrentCulture, format, args)
+            );
         }
 
         public static void TraceError(string format, params object[] args)
         {
-            trace.TraceEvent(TraceEventType.Error, 0, string.Format(CultureInfo.CurrentCulture, format, args));
+            trace.TraceEvent(
+                TraceEventType.Error,
+                0,
+                string.Format(CultureInfo.CurrentCulture, format, args)
+            );
         }
 
         public static void TraceWarning(string format, params object[] args)
         {
-            trace.TraceEvent(TraceEventType.Warning, 0, string.Format(CultureInfo.CurrentCulture, format, args));
+            trace.TraceEvent(
+                TraceEventType.Warning,
+                0,
+                string.Format(CultureInfo.CurrentCulture, format, args)
+            );
         }
     }
 }

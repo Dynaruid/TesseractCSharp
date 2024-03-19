@@ -20,7 +20,6 @@ namespace TesseractDotnetWrapper
             get { return angle; }
         }
 
-
         public float Confidence
         {
             get { return confidence; }
@@ -49,7 +48,8 @@ namespace TesseractDotnetWrapper
         public override int GetHashCode()
         {
             int hashCode = 0;
-            unchecked {
+            unchecked
+            {
                 hashCode += 1000000007 * angle.GetHashCode();
                 hashCode += 1000000009 * confidence.GetHashCode();
             }
@@ -66,6 +66,5 @@ namespace TesseractDotnetWrapper
             return !(lhs == rhs);
         }
         #endregion
-        
     }
 }

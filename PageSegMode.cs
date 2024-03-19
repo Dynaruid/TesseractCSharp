@@ -78,7 +78,7 @@ namespace TesseractDotnetWrapper
         /// </summary>
         RawLine = 13,
 
-        /// <summary>        
+        /// <summary>
         /// Number of enum entries.
         /// </summary>
         Count

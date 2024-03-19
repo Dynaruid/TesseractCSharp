@@ -21,7 +21,7 @@ namespace TesseractDotnetWrapper
         internal PageIterator(Page page, IntPtr handle)
         {
             this.page = page;
-        	this.handle = new HandleRef(this, handle);
+            this.handle = new HandleRef(this, handle);
         }
 
         /// <summary>
@@ -30,7 +30,8 @@ namespace TesseractDotnetWrapper
         public void Begin()
         {
             VerifyNotDisposed();
-            if (handle.Handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero)
+            {
                 NativeTessApiSignatures.PageIteratorBegin(handle);
             }
         }
@@ -39,7 +40,7 @@ namespace TesseractDotnetWrapper
         /// Moves to the start of the next element at the given level.
         /// </summary>
         /// <remarks>
-        /// 
+        ///
         /// </remarks>
         /// <param name="level"></param>
         /// <returns></returns>
@@ -62,9 +63,12 @@ namespace TesseractDotnetWrapper
             VerifyNotDisposed();
 
             var isAtFinalElement = IsAtFinalOf(level, element);
-            if (!isAtFinalElement) {
+            if (!isAtFinalElement)
+            {
                 return Next(element);
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
@@ -98,7 +102,8 @@ namespace TesseractDotnetWrapper
 
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return NativeTessApiSignatures.PageIteratorIsAtFinalElement(handle, level, element) != 0;
+            return NativeTessApiSignatures.PageIteratorIsAtFinalElement(handle, level, element)
+                != 0;
         }
 
         public PolyBlockType BlockType
@@ -116,7 +121,8 @@ namespace TesseractDotnetWrapper
         public Pix GetBinaryImage(PageIteratorLevel level)
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return null;
             }
 
@@ -126,18 +132,28 @@ namespace TesseractDotnetWrapper
         public Pix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 x = 0;
                 y = 0;
 
                 return null;
             }
 
-            return Pix.Create(NativeTessApiSignatures.PageIteratorGetImage(handle, level, padding, page.Image.Handle, out x, out y));
+            return Pix.Create(
+                NativeTessApiSignatures.PageIteratorGetImage(
+                    handle,
+                    level,
+                    padding,
+                    page.Image.Handle,
+                    out x,
+                    out y
+                )
+            );
         }
 
         /// <summary>
-        /// Gets the bounding rectangle of the current element at the given level. 
+        /// Gets the bounding rectangle of the current element at the given level.
         /// </summary>
         /// <param name="level"></param>
         /// <param name="bounds"></param>
@@ -145,12 +161,27 @@ namespace TesseractDotnetWrapper
         public bool TryGetBoundingBox(PageIteratorLevel level, out Rect bounds)
         {
             VerifyNotDisposed();
-            int x1, y1, x2, y2;
-            if (handle.Handle != IntPtr.Zero && NativeTessApiSignatures.PageIteratorBoundingBox(handle, level, out x1, out y1, out x2, out y2) != 0)
+            int x1,
+                y1,
+                x2,
+                y2;
+            if (
+                handle.Handle != IntPtr.Zero
+                && NativeTessApiSignatures.PageIteratorBoundingBox(
+                    handle,
+                    level,
+                    out x1,
+                    out y1,
+                    out x2,
+                    out y2
+                ) != 0
+            )
             {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
-            } else {
+            }
+            else
+            {
                 bounds = Rect.Empty;
                 return false;
             }
@@ -168,12 +199,27 @@ namespace TesseractDotnetWrapper
         public bool TryGetBaseline(PageIteratorLevel level, out Rect bounds)
         {
             VerifyNotDisposed();
-            int x1, y1, x2, y2;
-            if (handle.Handle != IntPtr.Zero && NativeTessApiSignatures.PageIteratorBaseline(handle, level, out x1, out y1, out x2, out y2) != 0)
+            int x1,
+                y1,
+                x2,
+                y2;
+            if (
+                handle.Handle != IntPtr.Zero
+                && NativeTessApiSignatures.PageIteratorBaseline(
+                    handle,
+                    level,
+                    out x1,
+                    out y1,
+                    out x2,
+                    out y2
+                ) != 0
+            )
             {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
-            } else {
+            }
+            else
+            {
                 bounds = Rect.Empty;
                 return false;
             }
@@ -185,23 +231,40 @@ namespace TesseractDotnetWrapper
         public ElementProperties GetProperties()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
-                return new ElementProperties(Orientation.PageUp, TextLineOrder.TopToBottom, WritingDirection.LeftToRight, 0f);
+            if (handle.Handle == IntPtr.Zero)
+            {
+                return new ElementProperties(
+                    Orientation.PageUp,
+                    TextLineOrder.TopToBottom,
+                    WritingDirection.LeftToRight,
+                    0f
+                );
             }
 
             Orientation orientation;
             WritingDirection writing_direction;
             TextLineOrder textLineOrder;
             float deskew_angle;
-            NativeTessApiSignatures.PageIteratorOrientation(handle, out orientation, out writing_direction, out textLineOrder, out deskew_angle);
+            NativeTessApiSignatures.PageIteratorOrientation(
+                handle,
+                out orientation,
+                out writing_direction,
+                out textLineOrder,
+                out deskew_angle
+            );
 
-            return new ElementProperties(orientation, textLineOrder, writing_direction, deskew_angle);
+            return new ElementProperties(
+                orientation,
+                textLineOrder,
+                writing_direction,
+                deskew_angle
+            );
         }
-
 
         protected override void Dispose(bool disposing)
         {
-            if (handle.Handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero)
+            {
                 NativeTessApiSignatures.PageIteratorDelete(handle);
             }
         }

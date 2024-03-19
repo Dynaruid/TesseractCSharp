@@ -10,28 +10,32 @@ namespace TesseractDotnetWrapper
     public class FontInfo
     {
         internal FontInfo(
-            string name, int id,
-            bool isItalic, bool isBold, bool isFixedPitch,
-            bool isSerif, bool isFraktur = false
+            string name,
+            int id,
+            bool isItalic,
+            bool isBold,
+            bool isFixedPitch,
+            bool isSerif,
+            bool isFraktur = false
         )
         {
             Name = name;
             Id = id;
 
-            IsItalic     = isItalic;
-            IsBold       = isBold;
+            IsItalic = isItalic;
+            IsBold = isBold;
             IsFixedPitch = isFixedPitch;
-            IsSerif      = isSerif;
-            IsFraktur    = isFraktur;
+            IsSerif = isSerif;
+            IsFraktur = isFraktur;
         }
 
         public string Name { get; private set; }
 
-        public int  Id           { get; private set; }
-        public bool IsItalic     { get; private set; }
-        public bool IsBold       { get; private set; }
+        public int Id { get; private set; }
+        public bool IsItalic { get; private set; }
+        public bool IsBold { get; private set; }
         public bool IsFixedPitch { get; private set; }
-        public bool IsSerif      { get; private set; }
-        public bool IsFraktur    { get; private set; }
+        public bool IsSerif { get; private set; }
+        public bool IsFraktur { get; private set; }
     }
 }

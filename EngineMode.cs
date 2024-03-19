@@ -1,11 +1,9 @@
-﻿
-using System;
+﻿using System;
 
 namespace TesseractDotnetWrapper
 {
-	
-	public enum EngineMode : int
-	{
+    public enum EngineMode : int
+    {
         /// <summary>
         /// Only the legacy tesseract OCR engine is used.
         /// </summary>
@@ -25,5 +23,5 @@ namespace TesseractDotnetWrapper
         /// The default OCR engine is used (currently LSTM-ased OCR engine).
         /// </summary>
         Default
-	}
+    }
 }

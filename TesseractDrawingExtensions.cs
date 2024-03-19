@@ -7,7 +7,6 @@ namespace TesseractDotnetWrapper
 {
     public static class TesseractDrawingExtensions
     {
-        
         /// <summary>
         /// Process the specified bitmap image.
         /// </summary>
@@ -19,7 +18,11 @@ namespace TesseractDotnetWrapper
         /// <param name="image">The image to process.</param>
         /// <param name="pageSegMode">The page segmentation mode.</param>
         /// <returns></returns>
-        public static Page Process(this TesseractEngine engine, Bitmap image, PageSegMode? pageSegMode = null)
+        public static Page Process(
+            this TesseractEngine engine,
+            Bitmap image,
+            PageSegMode? pageSegMode = null
+        )
         {
             return engine.Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
         }
@@ -36,9 +39,19 @@ namespace TesseractDotnetWrapper
         /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
         /// <param name="pageSegMode">The page segmentation mode.</param>
         /// <returns></returns>
-        public static Page Process(this TesseractEngine engine, Bitmap image, string inputName, PageSegMode? pageSegMode = null)
+        public static Page Process(
+            this TesseractEngine engine,
+            Bitmap image,
+            string inputName,
+            PageSegMode? pageSegMode = null
+        )
         {
-            return engine.Process(image, inputName, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+            return engine.Process(
+                image,
+                inputName,
+                new Rect(0, 0, image.Width, image.Height),
+                pageSegMode
+            );
         }
 
         /// <summary>
@@ -53,7 +66,12 @@ namespace TesseractDotnetWrapper
         /// <param name="region">The region of the image to process.</param>
         /// <param name="pageSegMode">The page segmentation mode.</param>
         /// <returns></returns>
-        public static Page Process(this TesseractEngine engine, Bitmap image, Rect region, PageSegMode? pageSegMode = null)
+        public static Page Process(
+            this TesseractEngine engine,
+            Bitmap image,
+            Rect region,
+            PageSegMode? pageSegMode = null
+        )
         {
             return engine.Process(image, null, region, pageSegMode);
         }
@@ -71,7 +89,13 @@ namespace TesseractDotnetWrapper
         /// <param name="region">The region of the image to process.</param>
         /// <param name="pageSegMode">The page segmentation mode.</param>
         /// <returns></returns>
-        public static Page Process(this TesseractEngine engine, Bitmap image, string inputName, Rect region, PageSegMode? pageSegMode = null)
+        public static Page Process(
+            this TesseractEngine engine,
+            Bitmap image,
+            string inputName,
+            Rect region,
+            PageSegMode? pageSegMode = null
+        )
         {
             var pix = PixConverter.ToPix(image);
             var page = engine.Process(pix, inputName, region, pageSegMode);
@@ -98,21 +122,36 @@ namespace TesseractDotnetWrapper
         {
             switch (bitmap.PixelFormat)
             {
-                case System.Drawing.Imaging.PixelFormat.Format1bppIndexed: return 1;
-                case System.Drawing.Imaging.PixelFormat.Format4bppIndexed: return 4;
-                case System.Drawing.Imaging.PixelFormat.Format8bppIndexed: return 8;
+                case System.Drawing.Imaging.PixelFormat.Format1bppIndexed:
+                    return 1;
+                case System.Drawing.Imaging.PixelFormat.Format4bppIndexed:
+                    return 4;
+                case System.Drawing.Imaging.PixelFormat.Format8bppIndexed:
+                    return 8;
                 case System.Drawing.Imaging.PixelFormat.Format16bppArgb1555:
                 case System.Drawing.Imaging.PixelFormat.Format16bppGrayScale:
                 case System.Drawing.Imaging.PixelFormat.Format16bppRgb555:
-                case System.Drawing.Imaging.PixelFormat.Format16bppRgb565: return 16;
-                case System.Drawing.Imaging.PixelFormat.Format24bppRgb: return 24;
+                case System.Drawing.Imaging.PixelFormat.Format16bppRgb565:
+                    return 16;
+                case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
+                    return 24;
                 case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
                 case System.Drawing.Imaging.PixelFormat.Format32bppPArgb:
-                case System.Drawing.Imaging.PixelFormat.Format32bppRgb: return 32;
-                case System.Drawing.Imaging.PixelFormat.Format48bppRgb: return 48;
+                case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
+                    return 32;
+                case System.Drawing.Imaging.PixelFormat.Format48bppRgb:
+                    return 48;
                 case System.Drawing.Imaging.PixelFormat.Format64bppArgb:
-                case System.Drawing.Imaging.PixelFormat.Format64bppPArgb: return 64;
-                default: throw new ArgumentException(String.Format("The bitmap's pixel format of {0} was not recognised.", bitmap.PixelFormat), "bitmap");
+                case System.Drawing.Imaging.PixelFormat.Format64bppPArgb:
+                    return 64;
+                default:
+                    throw new ArgumentException(
+                        String.Format(
+                            "The bitmap's pixel format of {0} was not recognised.",
+                            bitmap.PixelFormat
+                        ),
+                        "bitmap"
+                    );
             }
         }
     }

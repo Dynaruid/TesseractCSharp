@@ -34,9 +34,14 @@ namespace TesseractDotnetWrapper
         /// <param name="datapath">The path to the parent directory that contains the 'tessdata' directory, ignored if the <c>TESSDATA_PREFIX</c> environment variable is defined.</param>
         /// <param name="language">The language to load, for example 'eng' for English.</param>
         public TesseractEngine(string datapath, string language)
-            : this(datapath, language, EngineMode.Default, new string[0], new Dictionary<string, object>(), false)
-        {
-        }
+            : this(
+                datapath,
+                language,
+                EngineMode.Default,
+                new string[0],
+                new Dictionary<string, object>(),
+                false
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="configFile"/>
@@ -60,9 +65,14 @@ namespace TesseractDotnetWrapper
         /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
         /// </param>
         public TesseractEngine(string datapath, string language, string configFile)
-            : this(datapath, language, EngineMode.Default, configFile != null ? new[] { configFile } : new string[0], new Dictionary<string, object>(), false)
-        {
-        }
+            : this(
+                datapath,
+                language,
+                EngineMode.Default,
+                configFile != null ? new[] { configFile } : new string[0],
+                new Dictionary<string, object>(),
+                false
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="configFiles"/>
@@ -83,9 +93,14 @@ namespace TesseractDotnetWrapper
         /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
         /// </param>
         public TesseractEngine(string datapath, string language, IEnumerable<string> configFiles)
-            : this(datapath, language, EngineMode.Default, configFiles, new Dictionary<string, object>(), false)
-        {
-        }
+            : this(
+                datapath,
+                language,
+                EngineMode.Default,
+                configFiles,
+                new Dictionary<string, object>(),
+                false
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/>.
@@ -102,9 +117,14 @@ namespace TesseractDotnetWrapper
         /// <param name="language">The language to load, for example 'eng' for English.</param>
         /// <param name="engineMode">The <see cref="EngineMode"/> value to use when initialising the tesseract engine.</param>
         public TesseractEngine(string datapath, string language, EngineMode engineMode)
-            : this(datapath, language, engineMode, new string[0], new Dictionary<string, object>(), false)
-        {
-        }
+            : this(
+                datapath,
+                language,
+                engineMode,
+                new string[0],
+                new Dictionary<string, object>(),
+                false
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/> and <paramref name="configFile"/>.
@@ -127,10 +147,20 @@ namespace TesseractDotnetWrapper
         /// An optional tesseract configuration file that is encoded using UTF8 without BOM
         /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
         /// </param>
-        public TesseractEngine(string datapath, string language, EngineMode engineMode, string configFile)
-            : this(datapath, language, engineMode, configFile != null ? new[] { configFile } : new string[0], new Dictionary<string, object>(), false)
-        {
-        }
+        public TesseractEngine(
+            string datapath,
+            string language,
+            EngineMode engineMode,
+            string configFile
+        )
+            : this(
+                datapath,
+                language,
+                engineMode,
+                configFile != null ? new[] { configFile } : new string[0],
+                new Dictionary<string, object>(),
+                false
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/> and <paramref name="configFiles"/>.
@@ -150,10 +180,20 @@ namespace TesseractDotnetWrapper
         /// An optional sequence of tesseract configuration files to load, encoded using UTF8 without BOM
         /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
         /// </param>
-        public TesseractEngine(string datapath, string language, EngineMode engineMode, IEnumerable<string> configFiles)
-            : this(datapath, language, engineMode, configFiles, new Dictionary<string, object>(), false)
-        {
-        }
+        public TesseractEngine(
+            string datapath,
+            string language,
+            EngineMode engineMode,
+            IEnumerable<string> configFiles
+        )
+            : this(
+                datapath,
+                language,
+                engineMode,
+                configFiles,
+                new Dictionary<string, object>(),
+                false
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/> and <paramref name="configFiles"/>.
@@ -173,17 +213,31 @@ namespace TesseractDotnetWrapper
         /// An optional sequence of tesseract configuration files to load, encoded using UTF8 without BOM
         /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
         /// </param>
-        public TesseractEngine(string datapath, string language, EngineMode engineMode, IEnumerable<string> configFiles, IDictionary<string, object> initialOptions, bool setOnlyNonDebugVariables)
+        public TesseractEngine(
+            string datapath,
+            string language,
+            EngineMode engineMode,
+            IEnumerable<string> configFiles,
+            IDictionary<string, object> initialOptions,
+            bool setOnlyNonDebugVariables
+        )
         {
             Guard.RequireNotNullOrEmpty("language", language);
 
             DefaultPageSegMode = PageSegMode.Auto;
             handle = new HandleRef(this, NativeTessApiSignatures.BaseApiCreate());
 
-            Initialise(datapath, language, engineMode, configFiles, initialOptions, setOnlyNonDebugVariables);
+            Initialise(
+                datapath,
+                language,
+                engineMode,
+                configFiles,
+                initialOptions,
+                setOnlyNonDebugVariables
+            );
         }
 
-        public string Version
+        public string? Version
         {
             get
             {
@@ -237,7 +291,12 @@ namespace TesseractDotnetWrapper
         /// <param name="pageSegMode">The page layout analyasis method to use.</param>
         public Page Process(Pix image, string inputName, PageSegMode? pageSegMode = null)
         {
-            return Process(image, inputName, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+            return Process(
+                image,
+                inputName,
+                new Rect(0, 0, image.Width, image.Height),
+                pageSegMode
+            );
         }
 
         /// <summary>
@@ -251,16 +310,35 @@ namespace TesseractDotnetWrapper
         /// <param name="region">The image region to process.</param>
         /// <param name="pageSegMode">The page layout analyasis method to use.</param>
         /// <returns>A result iterator</returns>
-        public Page Process(Pix image, string inputName, Rect region, PageSegMode? pageSegMode = null)
+        public Page Process(
+            Pix image,
+            string? inputName,
+            Rect region,
+            PageSegMode? pageSegMode = null
+        )
         {
-            if (image == null) throw new ArgumentNullException("image");
-            if (region.X1 < 0 || region.Y1 < 0 || region.X2 > image.Width || region.Y2 > image.Height)
-                throw new ArgumentException("The image region to be processed must be within the image bounds.", "region");
-            if (processCount > 0) throw new InvalidOperationException("Only one image can be processed at once. Please make sure you dispose of the page once your finished with it.");
+            if (image == null)
+                throw new ArgumentNullException("image");
+            if (
+                region.X1 < 0
+                || region.Y1 < 0
+                || region.X2 > image.Width
+                || region.Y2 > image.Height
+            )
+                throw new ArgumentException(
+                    "The image region to be processed must be within the image bounds.",
+                    "region"
+                );
+            if (processCount > 0)
+                throw new InvalidOperationException(
+                    "Only one image can be processed at once. Please make sure you dispose of the page once your finished with it."
+                );
 
             processCount++;
 
-            var actualPageSegmentMode = pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode;
+            var actualPageSegmentMode = pageSegMode.HasValue
+                ? pageSegMode.Value
+                : DefaultPageSegMode;
             NativeTessApiSignatures.BaseAPISetPageSegMode(handle, actualPageSegmentMode);
             NativeTessApiSignatures.BaseApiSetImage(handle, image.Handle);
             if (!String.IsNullOrEmpty(inputName))
@@ -281,7 +359,7 @@ namespace TesseractDotnetWrapper
             }
         }
 
-        private string GetTessDataPrefix()
+        private string? GetTessDataPrefix()
         {
             try
             {
@@ -289,12 +367,24 @@ namespace TesseractDotnetWrapper
             }
             catch (SecurityException e)
             {
-                trace.TraceEvent(TraceEventType.Error, 0, "Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
+                trace.TraceEvent(
+                    TraceEventType.Error,
+                    0,
+                    "Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}",
+                    e.Message
+                );
                 return null;
             }
         }
 
-        private void Initialise(string datapath, string language, EngineMode engineMode, IEnumerable<string> configFiles, IDictionary<string, object> initialValues, bool setOnlyNonDebugVariables)
+        private void Initialise(
+            string datapath,
+            string language,
+            EngineMode engineMode,
+            IEnumerable<string> configFiles,
+            IDictionary<string, object> initialValues,
+            bool setOnlyNonDebugVariables
+        )
         {
             Guard.RequireNotNullOrEmpty("language", language);
 
@@ -305,19 +395,34 @@ namespace TesseractDotnetWrapper
                 datapath = datapath.Trim();
 
                 // remove any trialing '\' or '/' characters
-                if (datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal))
+                if (
+                    datapath.EndsWith("\\", StringComparison.Ordinal)
+                    || datapath.EndsWith("/", StringComparison.Ordinal)
+                )
                 {
                     datapath = datapath.Substring(0, datapath.Length - 1);
                 }
             }
 
-            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0)
+            if (
+                Interop.TessApi.BaseApiInit(
+                    handle,
+                    datapath,
+                    language,
+                    (int)engineMode,
+                    configFiles ?? new List<string>(),
+                    initialValues ?? new Dictionary<string, object>(),
+                    setOnlyNonDebugVariables
+                ) != 0
+            )
             {
                 // Special case logic to handle cleaning up as init has already released the handle if it fails.
                 handle = new HandleRef(this, IntPtr.Zero);
                 GC.SuppressFinalize(this);
 
-                throw new TesseractException(ErrorMessage.Format(1, "Failed to initialise tesseract engine."));
+                throw new TesseractException(
+                    ErrorMessage.Format(1, "Failed to initialise tesseract engine.")
+                );
             }
         }
 
@@ -349,11 +454,7 @@ namespace TesseractDotnetWrapper
         /// <summary>
         /// Gets or sets default <see cref="PageSegMode" /> mode used by <see cref="TesseractDotnetWrapper.TesseractEngine.Process(Pix, Rect, PageSegMode?)" />.
         /// </summary>
-        public PageSegMode DefaultPageSegMode
-        {
-            get;
-            set;
-        }
+        public PageSegMode DefaultPageSegMode { get; set; }
 
         public bool SetDebugVariable(string name, string value)
         {
@@ -456,7 +557,7 @@ namespace TesseractDotnetWrapper
         /// <param name="name">The name of the variable.</param>
         /// <param name="value">The current value of the variable.</param>
         /// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
-        public bool TryGetStringVariable(string name, out string value)
+        public bool TryGetStringVariable(string name, out string? value)
         {
             value = Interop.TessApi.BaseApiGetStringVariable(handle, name);
             return value != null;

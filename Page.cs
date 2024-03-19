@@ -31,14 +31,20 @@ namespace TesseractDotnetWrapper
         /// <remarks>
         /// This is also used for some of the more advanced functionality such as identifying the associated UZN file if present.
         /// </remarks>
-        public string ImageName { get; private set; }
+        public string? ImageName { get; private set; }
 
         /// <summary>
         /// Gets the page segmentation mode used to OCR the specified image.
         /// </summary>
         public PageSegMode PageSegmentMode { get; private set; }
 
-        internal Page(TesseractEngine engine, Pix image, string imageName, Rect regionOfInterest, PageSegMode pageSegmentMode)
+        internal Page(
+            TesseractEngine engine,
+            Pix image,
+            string? imageName,
+            Rect regionOfInterest,
+            PageSegMode pageSegmentMode
+        )
         {
             Engine = engine;
             Image = image;
@@ -52,21 +58,32 @@ namespace TesseractDotnetWrapper
         /// </summary>
         public Rect RegionOfInterest
         {
-            get
-            {
-                return regionOfInterest;
-            }
+            get { return regionOfInterest; }
             set
             {
-                if (value.X1 < 0 || value.Y1 < 0 || value.X2 > Image.Width || value.Y2 > Image.Height)
-                    throw new ArgumentException("The region of interest to be processed must be within the image bounds.", "value");
+                if (
+                    value.X1 < 0
+                    || value.Y1 < 0
+                    || value.X2 > Image.Width
+                    || value.Y2 > Image.Height
+                )
+                    throw new ArgumentException(
+                        "The region of interest to be processed must be within the image bounds.",
+                        "value"
+                    );
 
                 if (regionOfInterest != value)
                 {
                     regionOfInterest = value;
 
                     // update region of interest in image
-                    NativeTessApiSignatures.BaseApiSetRectangle(Engine.Handle, regionOfInterest.X1, regionOfInterest.Y1, regionOfInterest.Width, regionOfInterest.Height);
+                    NativeTessApiSignatures.BaseApiSetRectangle(
+                        Engine.Handle,
+                        regionOfInterest.X1,
+                        regionOfInterest.Y1,
+                        regionOfInterest.Width,
+                        regionOfInterest.Height
+                    );
 
                     // request rerun of recognition on the next call that requires recognition
                     runRecognitionPhase = false;
@@ -97,7 +114,10 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public PageIterator AnalyseLayout()
         {
-            Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead.");
+            Guard.Verify(
+                PageSegmentMode != PageSegMode.OsdOnly,
+                "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead."
+            );
 
             var resultIteratorHandle = NativeTessApiSignatures.BaseAPIAnalyseLayout(Engine.Handle);
             return new PageIterator(this, resultIteratorHandle);
@@ -118,7 +138,7 @@ namespace TesseractDotnetWrapper
         /// Gets the page's content as plain text.
         /// </summary>
         /// <returns></returns>
-        public string GetText()
+        public string? GetText()
         {
             Recognize();
             return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
@@ -130,10 +150,14 @@ namespace TesseractDotnetWrapper
         /// <param name="pageNum">The page number (zero based).</param>
         /// <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
         /// <returns>The OCR'd output as an HOCR text string.</returns>
-        public string GetHOCRText(int pageNum, bool useXHtml = false)
+        public string? GetHOCRText(int pageNum, bool useXHtml = false)
         {
             //Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
-            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+            Guard.Require(
+                "pageNum",
+                pageNum >= 0,
+                "Page number must be greater than or equal to zero (0)."
+            );
             Recognize();
             if (useXHtml)
                 return Interop.TessApi.BaseAPIGetHOCRText2(Engine.Handle, pageNum);
@@ -146,9 +170,13 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as an Alto text string.</returns>
-        public string GetAltoText(int pageNum)
+        public string? GetAltoText(int pageNum)
         {
-            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+            Guard.Require(
+                "pageNum",
+                pageNum >= 0,
+                "Page number must be greater than or equal to zero (0)."
+            );
             Recognize();
             return Interop.TessApi.BaseAPIGetAltoText(Engine.Handle, pageNum);
         }
@@ -158,9 +186,13 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as a Tsv text string.</returns>
-        public string GetTsvText(int pageNum)
+        public string? GetTsvText(int pageNum)
         {
-            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+            Guard.Require(
+                "pageNum",
+                pageNum >= 0,
+                "Page number must be greater than or equal to zero (0)."
+            );
             Recognize();
             return Interop.TessApi.BaseAPIGetTsvText(Engine.Handle, pageNum);
         }
@@ -170,9 +202,13 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as a Box text string.</returns>
-        public string GetBoxText(int pageNum)
+        public string? GetBoxText(int pageNum)
         {
-            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+            Guard.Require(
+                "pageNum",
+                pageNum >= 0,
+                "Page number must be greater than or equal to zero (0)."
+            );
             Recognize();
             return Interop.TessApi.BaseAPIGetBoxText(Engine.Handle, pageNum);
         }
@@ -182,9 +218,13 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as a LSTMBox text string.</returns>
-        public string GetLSTMBoxText(int pageNum)
+        public string? GetLSTMBoxText(int pageNum)
         {
-            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+            Guard.Require(
+                "pageNum",
+                pageNum >= 0,
+                "Page number must be greater than or equal to zero (0)."
+            );
             Recognize();
             return Interop.TessApi.BaseAPIGetLSTMBoxText(Engine.Handle, pageNum);
         }
@@ -194,9 +234,13 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as a WordStrBox text string.</returns>
-        public string GetWordStrBoxText(int pageNum)
+        public string? GetWordStrBoxText(int pageNum)
         {
-            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+            Guard.Require(
+                "pageNum",
+                pageNum >= 0,
+                "Page number must be greater than or equal to zero (0)."
+            );
             Recognize();
             return Interop.TessApi.BaseAPIGetWordStrBoxText(Engine.Handle, pageNum);
         }
@@ -206,7 +250,7 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as an UNLV text string.</returns>
-        public string GetUNLVText()
+        public string? GetUNLVText()
         {
             Recognize();
             return Interop.TessApi.BaseAPIGetUNLVText(Engine.Handle);
@@ -229,21 +273,40 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public List<Rectangle> GetSegmentedRegions(PageIteratorLevel pageIteratorLevel)
         {
-            var boxArray = NativeTessApiSignatures.BaseAPIGetComponentImages(Engine.Handle, pageIteratorLevel, Interop.Constants.TRUE, IntPtr.Zero, IntPtr.Zero);
+            var boxArray = NativeTessApiSignatures.BaseAPIGetComponentImages(
+                Engine.Handle,
+                pageIteratorLevel,
+                Interop.Constants.TRUE,
+                IntPtr.Zero,
+                IntPtr.Zero
+            );
             int boxCount = NativeLeptonicaApiSignatures.boxaGetCount(new HandleRef(this, boxArray));
 
             List<Rectangle> boxList = new List<Rectangle>();
 
             for (int i = 0; i < boxCount; i++)
             {
-                var box = NativeLeptonicaApiSignatures.boxaGetBox(new HandleRef(this, boxArray), i, PixArrayAccessType.Clone);
+                var box = NativeLeptonicaApiSignatures.boxaGetBox(
+                    new HandleRef(this, boxArray),
+                    i,
+                    PixArrayAccessType.Clone
+                );
                 if (box == IntPtr.Zero)
                 {
                     continue;
                 }
 
-                int px, py, pw, ph;
-                NativeLeptonicaApiSignatures.boxGetGeometry(new HandleRef(this, box), out px, out py, out pw, out ph);
+                int px,
+                    py,
+                    pw,
+                    ph;
+                NativeLeptonicaApiSignatures.boxGetGeometry(
+                    new HandleRef(this, box),
+                    out px,
+                    out py,
+                    out pw,
+                    out ph
+                );
                 boxList.Add(new Rectangle(px, py, pw, ph));
                 NativeLeptonicaApiSignatures.boxDestroy(ref box);
             }
@@ -262,8 +325,10 @@ namespace TesseractDotnetWrapper
         /// </remarks>
         /// <param name="orientation">The page orientation.</param>
         /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
-        /// 
-        [Obsolete("Use DetectBestOrientation(int orientationDegrees, float confidence) that returns orientation in degrees instead.")]
+        ///
+        [Obsolete(
+            "Use DetectBestOrientation(int orientationDegrees, float confidence) that returns orientation in degrees instead."
+        )]
         public void DetectBestOrientation(out Orientation orientation, out float confidence)
         {
             int orientationDegrees;
@@ -308,11 +373,15 @@ namespace TesseractDotnetWrapper
         /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
         public void DetectBestOrientation(out int orientation, out float confidence)
         {
-            string scriptName;
+            string? scriptName;
             float scriptConfidence;
-            DetectBestOrientationAndScript(out orientation, out confidence, out scriptName, out scriptConfidence);
+            DetectBestOrientationAndScript(
+                out orientation,
+                out confidence,
+                out scriptName,
+                out scriptConfidence
+            );
         }
-
 
         /// <summary>
         /// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
@@ -325,14 +394,27 @@ namespace TesseractDotnetWrapper
         /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
         /// <param name="scriptName">The name of the script (e.g. Latin)<param>
         /// <param name="scriptConfidence">The confidence level in the script</param>
-        public void DetectBestOrientationAndScript(out int orientation, out float confidence, out string scriptName, out float scriptConfidence)
+        public void DetectBestOrientationAndScript(
+            out int orientation,
+            out float confidence,
+            out string? scriptName,
+            out float scriptConfidence
+        )
         {
             int orient_deg;
             float orient_conf;
             IntPtr script_nameHandle;
             float script_conf;
 
-            if (NativeTessApiSignatures.TessBaseAPIDetectOrientationScript(Engine.Handle, out orient_deg, out orient_conf, out script_nameHandle, out script_conf) != 0)
+            if (
+                NativeTessApiSignatures.TessBaseAPIDetectOrientationScript(
+                    Engine.Handle,
+                    out orient_deg,
+                    out orient_conf,
+                    out script_nameHandle,
+                    out script_conf
+                ) != 0
+            )
             {
                 orientation = orient_deg;
                 confidence = orient_conf;
@@ -355,10 +437,18 @@ namespace TesseractDotnetWrapper
 
         internal void Recognize()
         {
-            Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
+            Guard.Verify(
+                PageSegmentMode != PageSegMode.OsdOnly,
+                "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead."
+            );
             if (!runRecognitionPhase)
             {
-                if (NativeTessApiSignatures.BaseApiRecognize(Engine.Handle, new HandleRef(this, IntPtr.Zero)) != 0)
+                if (
+                    NativeTessApiSignatures.BaseApiRecognize(
+                        Engine.Handle,
+                        new HandleRef(this, IntPtr.Zero)
+                    ) != 0
+                )
                 {
                     throw new InvalidOperationException("Recognition of image failed.");
                 }
@@ -367,19 +457,36 @@ namespace TesseractDotnetWrapper
 
                 // now write out the thresholded image if required to do so
                 bool tesseditWriteImages;
-                if (Engine.TryGetBoolVariable("tessedit_write_images", out tesseditWriteImages) && tesseditWriteImages)
+                if (
+                    Engine.TryGetBoolVariable("tessedit_write_images", out tesseditWriteImages)
+                    && tesseditWriteImages
+                )
                 {
                     using (Pix thresholdedImage = GetThresholdedImage())
                     {
-                        string filePath = Path.Combine(Environment.CurrentDirectory, "tessinput.tif");
+                        string filePath = Path.Combine(
+                            Environment.CurrentDirectory,
+                            "tessinput.tif"
+                        );
                         try
                         {
                             thresholdedImage.Save(filePath, ImageFormat.TiffG4);
-                            trace.TraceEvent(TraceEventType.Information, 2, "Successfully saved the thresholded image to '{0}'", filePath);
+                            trace.TraceEvent(
+                                TraceEventType.Information,
+                                2,
+                                "Successfully saved the thresholded image to '{0}'",
+                                filePath
+                            );
                         }
                         catch (Exception error)
                         {
-                            trace.TraceEvent(TraceEventType.Error, 2, "Failed to save the thresholded image to '{0}'.\nError: {1}", filePath, error.Message);
+                            trace.TraceEvent(
+                                TraceEventType.Error,
+                                2,
+                                "Failed to save the thresholded image to '{0}'.\nError: {1}",
+                                filePath,
+                                error.Message
+                            );
                         }
                     }
                 }

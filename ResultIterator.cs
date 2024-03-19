@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using TesseractDotnetWrapper.Interop;
 
 namespace TesseractDotnetWrapper
@@ -9,9 +8,7 @@ namespace TesseractDotnetWrapper
     public sealed class ResultIterator : PageIterator
     {
         internal ResultIterator(Page page, IntPtr handle)
-            : base(page, handle)
-        {
-        }
+            : base(page, handle) { }
 
         public float GetConfidence(PageIteratorLevel level)
         {
@@ -22,42 +19,59 @@ namespace TesseractDotnetWrapper
             return NativeTessApiSignatures.ResultIteratorGetConfidence(handle, level);
         }
 
-        public string GetText(PageIteratorLevel level)
+        public string? GetText(PageIteratorLevel level)
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return String.Empty;
             }
 
-            return Interop.TessApi.ResultIteratorGetUTF8Text(handle, level);
+            return TessApi.ResultIteratorGetUTF8Text(handle, level);
         }
-        
+
         private Dictionary<int, FontInfo> _fontInfoCache = new Dictionary<int, FontInfo>();
-        public FontAttributes GetWordFontAttributes() {
+
+        public FontAttributes? GetWordFontAttributes()
+        {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return null;
             }
 
-            bool isBold, isItalic, isUnderlined, isMonospace, isSerif, isSmallCaps;
-            int pointSize, fontId;
+            bool isBold,
+                isItalic,
+                isUnderlined,
+                isMonospace,
+                isSerif,
+                isSmallCaps;
+            int pointSize,
+                fontId;
 
             // per docs (ltrresultiterator.h:104 as of 4897796 in github:tesseract-ocr/tesseract)
             // this return value points to an internal table and should not be deleted.
-            IntPtr nameHandle =
-                NativeTessApiSignatures.ResultIteratorWordFontAttributes(
-                    handle,
-                    out isBold, out isItalic, out isUnderlined,
-                    out isMonospace, out isSerif, out isSmallCaps,
-                    out pointSize, out fontId);
+            IntPtr nameHandle = NativeTessApiSignatures.ResultIteratorWordFontAttributes(
+                handle,
+                out isBold,
+                out isItalic,
+                out isUnderlined,
+                out isMonospace,
+                out isSerif,
+                out isSmallCaps,
+                out pointSize,
+                out fontId
+            );
 
             // This can happen in certain error conditions
-            if (nameHandle == IntPtr.Zero) {
+            if (nameHandle == IntPtr.Zero)
+            {
                 return null;
             }
 
             FontInfo fontInfo;
-            if (!_fontInfoCache.TryGetValue(fontId, out fontInfo)) {
+            if (!_fontInfoCache.TryGetValue(fontId, out fontInfo))
+            {
                 string fontName = MarshalHelper.PtrToString(nameHandle, Encoding.UTF8);
                 fontInfo = new FontInfo(fontName, fontId, isItalic, isBold, isMonospace, isSerif);
                 _fontInfoCache.Add(fontId, fontInfo);
@@ -66,20 +80,22 @@ namespace TesseractDotnetWrapper
             return new FontAttributes(fontInfo, isUnderlined, isSmallCaps, pointSize);
         }
 
-        public string GetWordRecognitionLanguage()
+        public string? GetWordRecognitionLanguage()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return null;
             }
 
-            return Interop.TessApi.ResultIteratorWordRecognitionLanguage(handle);
+            return TessApi.ResultIteratorWordRecognitionLanguage(handle);
         }
 
         public bool GetWordIsFromDictionary()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return false;
             }
 
@@ -89,7 +105,8 @@ namespace TesseractDotnetWrapper
         public bool GetWordIsNumeric()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return false;
             }
 
@@ -99,7 +116,8 @@ namespace TesseractDotnetWrapper
         public bool GetSymbolIsSuperscript()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return false;
             }
 
@@ -109,7 +127,8 @@ namespace TesseractDotnetWrapper
         public bool GetSymbolIsSubscript()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return false;
             }
 
@@ -119,7 +138,8 @@ namespace TesseractDotnetWrapper
         public bool GetSymbolIsDropcap()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return false;
             }
 
@@ -131,9 +151,11 @@ namespace TesseractDotnetWrapper
         /// choices for this symbol and after that is is useless.
         /// </summary>
         /// <returns>an instance of a Choice Iterator</returns>
-        public ChoiceIterator GetChoiceIterator()
+        public ChoiceIterator? GetChoiceIterator()
         {
-            var choiceIteratorHandle = NativeTessApiSignatures.ResultIteratorGetChoiceIterator(this.handle);
+            var choiceIteratorHandle = NativeTessApiSignatures.ResultIteratorGetChoiceIterator(
+                this.handle
+            );
             if (choiceIteratorHandle == IntPtr.Zero)
                 return null;
             return new ChoiceIterator(choiceIteratorHandle);

@@ -7,7 +7,7 @@ using TesseractDotnetWrapper.Interop;
 
 namespace TesseractDotnetWrapper
 {
-    public unsafe sealed class Pix : DisposableBase, IEquatable<Pix>
+    public sealed unsafe class Pix : DisposableBase, IEquatable<Pix>
     {
         #region Constants
 
@@ -28,7 +28,10 @@ namespace TesseractDotnetWrapper
         /// <summary>
         /// Used to lookup image formats by extension.
         /// </summary>
-        private static readonly Dictionary<string, ImageFormat> imageFomatLookup = new Dictionary<string, ImageFormat>
+        private static readonly Dictionary<string, ImageFormat> imageFomatLookup = new Dictionary<
+            string,
+            ImageFormat
+        >
         {
             { ".jpg", ImageFormat.JfifJpeg },
             { ".jpeg", ImageFormat.JfifJpeg },
@@ -50,7 +53,7 @@ namespace TesseractDotnetWrapper
         private HandleRef handle;
 
         #endregion Fields
-        
+
         #region Create\Load methods
 
         /// <summary>
@@ -62,7 +65,8 @@ namespace TesseractDotnetWrapper
         /// <param name="handle"></param>
         private Pix(IntPtr handle)
         {
-            if (handle == IntPtr.Zero) throw new ArgumentNullException("handle");
+            if (handle == IntPtr.Zero)
+                throw new ArgumentNullException("handle");
 
             this.handle = new HandleRef(this, handle);
             this.width = NativeLeptonicaApiSignatures.pixGetWidth(this.handle);
@@ -81,18 +85,24 @@ namespace TesseractDotnetWrapper
             if (!AllowedDepths.Contains(depth))
                 throw new ArgumentException("Depth must be 1, 2, 4, 8, 16, or 32 bits.", "depth");
 
-            if (width <= 0) throw new ArgumentException("Width must be greater than zero", "width");
-            if (height <= 0) throw new ArgumentException("Height must be greater than zero", "height");
+            if (width <= 0)
+                throw new ArgumentException("Width must be greater than zero", "width");
+            if (height <= 0)
+                throw new ArgumentException("Height must be greater than zero", "height");
 
             var handle = NativeLeptonicaApiSignatures.pixCreate(width, height, depth);
-            if (handle == IntPtr.Zero) throw new InvalidOperationException("Failed to create pix, this normally occurs because the requested image size is too large, please check Standard Error Output.");
+            if (handle == IntPtr.Zero)
+                throw new InvalidOperationException(
+                    "Failed to create pix, this normally occurs because the requested image size is too large, please check Standard Error Output."
+                );
 
             return Create(handle);
         }
 
         public static Pix Create(IntPtr handle)
         {
-            if (handle == IntPtr.Zero) throw new ArgumentException("Pix handle must not be zero (null).", "handle");
+            if (handle == IntPtr.Zero)
+                throw new ArgumentException("Pix handle must not be zero (null).", "handle");
 
             return new Pix(handle);
         }
@@ -109,17 +119,17 @@ namespace TesseractDotnetWrapper
 
         public static Pix LoadFromMemory(byte[] bytes)
         {
-	        IntPtr handle;
-	        fixed (byte* ptr = bytes)
-	        {
-		        handle = NativeLeptonicaApiSignatures.pixReadMem(ptr, bytes.Length);
-	        }
-	        if (handle == IntPtr.Zero)
-	        {
-		        throw new IOException("Failed to load image from memory.");
-	        }
-	        return Create(handle);
-		}
+            IntPtr handle;
+            fixed (byte* ptr = bytes)
+            {
+                handle = NativeLeptonicaApiSignatures.pixReadMem(ptr, bytes.Length);
+            }
+            if (handle == IntPtr.Zero)
+            {
+                throw new IOException("Failed to load image from memory.");
+            }
+            return Create(handle);
+        }
 
         public static Pix LoadTiffFromMemory(byte[] bytes)
         {
@@ -142,7 +152,12 @@ namespace TesseractDotnetWrapper
 
             if (handle == IntPtr.Zero)
             {
-                throw new IOException(String.Format("Failed to load image from multi-page Tiff at offset {0}.", offset));
+                throw new IOException(
+                    String.Format(
+                        "Failed to load image from multi-page Tiff at offset {0}.",
+                        offset
+                    )
+                );
             }
             return Create(handle);
         }
@@ -231,7 +246,7 @@ namespace TesseractDotnetWrapper
             }
 
             int same;
-            if(NativeLeptonicaApiSignatures.pixEqual(Handle, other.Handle, out same) != 0)
+            if (NativeLeptonicaApiSignatures.pixEqual(Handle, other.Handle, out same) != 0)
             {
                 throw new TesseractException("Failed to compare pix");
             }
@@ -311,14 +326,33 @@ namespace TesseractDotnetWrapper
         /// <param name="smoothy"> smoothY Half-height of convolution kernel applied to threshold array: use 0 for no smoothing.</param>
         /// <param name="scorefract"> scoreFraction Fraction of the max Otsu score; typ. 0.1 (use 0.0 for standard Otsu).</param>
         /// <returns>The binarized image.</returns>
-        public Pix BinarizeOtsuAdaptiveThreshold(int sx, int sy, int smoothx, int smoothy, float scorefract)
+        public Pix BinarizeOtsuAdaptiveThreshold(
+            int sx,
+            int sy,
+            int smoothx,
+            int smoothy,
+            float scorefract
+        )
         {
-            Guard.Verify(Depth == 8, "Image must have a depth of 8 bits per pixel to be binerized using Otsu.");
+            Guard.Verify(
+                Depth == 8,
+                "Image must have a depth of 8 bits per pixel to be binerized using Otsu."
+            );
             Guard.Require("sx", sx >= 16, "The sx parameter must be greater than or equal to 16");
             Guard.Require("sy", sy >= 16, "The sy parameter must be greater than or equal to 16");
 
-            IntPtr ppixth, ppixd;
-            int result = NativeLeptonicaApiSignatures.pixOtsuAdaptiveThreshold(handle, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
+            IntPtr ppixth,
+                ppixd;
+            int result = NativeLeptonicaApiSignatures.pixOtsuAdaptiveThreshold(
+                handle,
+                sx,
+                sy,
+                smoothx,
+                smoothy,
+                scorefract,
+                out ppixth,
+                out ppixd
+            );
 
             if (ppixth != IntPtr.Zero)
             {
@@ -326,7 +360,8 @@ namespace TesseractDotnetWrapper
                 NativeLeptonicaApiSignatures.pixDestroy(ref ppixth);
             }
 
-            if (result == 1) throw new TesseractException("Failed to binarize image.");
+            if (result == 1)
+                throw new TesseractException("Failed to binarize image.");
 
             return new Pix(ppixd);
         }
@@ -365,13 +400,34 @@ namespace TesseractDotnetWrapper
         {
             Guard.Verify(Depth == 8, "Source image must be 8bpp");
             Guard.Verify(Colormap == null, "Source image must not be color mapped.");
-            Guard.Require("whsize", whsize >= 2, "The window half-width (whsize) must be greater than 2.");
+            Guard.Require(
+                "whsize",
+                whsize >= 2,
+                "The window half-width (whsize) must be greater than 2."
+            );
             int maxWhSize = Math.Min((Width - 3) / 2, (Height - 3) / 2);
-            Guard.Require("whsize", whsize < maxWhSize, "The window half-width (whsize) must be less than {0} for this image.", maxWhSize);
+            Guard.Require(
+                "whsize",
+                whsize < maxWhSize,
+                "The window half-width (whsize) must be less than {0} for this image.",
+                maxWhSize
+            );
             Guard.Require("factor", factor >= 0, "Factor must be greater than zero (0).");
 
-            IntPtr ppixm, ppixsd, ppixth, ppixd;
-            int result = NativeLeptonicaApiSignatures.pixSauvolaBinarize(handle, whsize, factor, addborder ? 1 : 0, out ppixm, out ppixsd, out ppixth, out ppixd);
+            IntPtr ppixm,
+                ppixsd,
+                ppixth,
+                ppixd;
+            int result = NativeLeptonicaApiSignatures.pixSauvolaBinarize(
+                handle,
+                whsize,
+                factor,
+                addborder ? 1 : 0,
+                out ppixm,
+                out ppixsd,
+                out ppixth,
+                out ppixd
+            );
 
             // Free memory held by other unused pix's
 
@@ -390,7 +446,8 @@ namespace TesseractDotnetWrapper
                 NativeLeptonicaApiSignatures.pixDestroy(ref ppixth);
             }
 
-            if (result == 1) throw new TesseractException("Failed to binarize image.");
+            if (result == 1)
+                throw new TesseractException("Failed to binarize image.");
 
             return new Pix(ppixd);
         }
@@ -418,13 +475,31 @@ namespace TesseractDotnetWrapper
         {
             Guard.Verify(Depth == 8, "Source image must be 8bpp");
             Guard.Verify(Colormap == null, "Source image must not be color mapped.");
-            Guard.Require("whsize", whsize >= 2, "The window half-width (whsize) must be greater than 2.");
+            Guard.Require(
+                "whsize",
+                whsize >= 2,
+                "The window half-width (whsize) must be greater than 2."
+            );
             int maxWhSize = Math.Min((Width - 3) / 2, (Height - 3) / 2);
-            Guard.Require("whsize", whsize < maxWhSize, "The window half-width (whsize) must be less than {0} for this image.", maxWhSize);
+            Guard.Require(
+                "whsize",
+                whsize < maxWhSize,
+                "The window half-width (whsize) must be less than {0} for this image.",
+                maxWhSize
+            );
             Guard.Require("factor", factor >= 0, "Factor must be greater than zero (0).");
 
-            IntPtr ppixth, ppixd;
-            int result = NativeLeptonicaApiSignatures.pixSauvolaBinarizeTiled(handle, whsize, factor, nx, ny, out ppixth, out ppixd);
+            IntPtr ppixth,
+                ppixd;
+            int result = NativeLeptonicaApiSignatures.pixSauvolaBinarizeTiled(
+                handle,
+                whsize,
+                factor,
+                nx,
+                ny,
+                out ppixth,
+                out ppixd
+            );
 
             // Free memory held by other unused pix's
             if (ppixth != IntPtr.Zero)
@@ -432,7 +507,8 @@ namespace TesseractDotnetWrapper
                 NativeLeptonicaApiSignatures.pixDestroy(ref ppixth);
             }
 
-            if (result == 1) throw new TesseractException("Failed to binarize image.");
+            if (result == 1)
+                throw new TesseractException("Failed to binarize image.");
 
             return new Pix(ppixd);
         }
@@ -447,14 +523,33 @@ namespace TesseractDotnetWrapper
         public Pix ConvertRGBToGray(float rwt, float gwt, float bwt)
         {
             Guard.Verify(Depth == 32, "The source image must have a depth of 32 (32 bpp).");
-            Guard.Require("rwt", rwt >= 0, "All weights must be greater than or equal to zero; red was not.");
-            Guard.Require("gwt", gwt >= 0, "All weights must be greater than or equal to zero; green was not.");
-            Guard.Require("bwt", bwt >= 0, "All weights must be greater than or equal to zero; blue was not.");
+            Guard.Require(
+                "rwt",
+                rwt >= 0,
+                "All weights must be greater than or equal to zero; red was not."
+            );
+            Guard.Require(
+                "gwt",
+                gwt >= 0,
+                "All weights must be greater than or equal to zero; green was not."
+            );
+            Guard.Require(
+                "bwt",
+                bwt >= 0,
+                "All weights must be greater than or equal to zero; blue was not."
+            );
 
-            var resultPixHandle = NativeLeptonicaApiSignatures.pixConvertRGBToGray(handle, rwt, gwt, bwt);
-            if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to convert to grayscale.");
+            var resultPixHandle = NativeLeptonicaApiSignatures.pixConvertRGBToGray(
+                handle,
+                rwt,
+                gwt,
+                bwt
+            );
+            if (resultPixHandle == IntPtr.Zero)
+                throw new TesseractException("Failed to convert to grayscale.");
             return new Pix(resultPixHandle);
         }
+
         /// <summary>
         /// Conversion from RBG to 8bpp grayscale.
         /// </summary>
@@ -465,15 +560,24 @@ namespace TesseractDotnetWrapper
         }
 
         /// <summary>
-        /// Removes horizontal lines from a grayscale image. 
+        /// Removes horizontal lines from a grayscale image.
         /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
         /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
         /// </summary>
         /// <returns>image with lines removed</returns>
         public Pix RemoveLines()
         {
-            float angle, conf;
-            IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
+            float angle,
+                conf;
+            IntPtr pix1,
+                pix2,
+                pix3,
+                pix4,
+                pix5,
+                pix6,
+                pix7,
+                pix8,
+                pix9;
 
             pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
 
@@ -484,8 +588,16 @@ namespace TesseractDotnetWrapper
 
                 /* find the skew angle and deskew using an interpolated
                  * rotator for anti-aliasing (to avoid jaggies) */
-                NativeLeptonicaApiSignatures.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
-                pix2 = NativeLeptonicaApiSignatures.pixRotateAMGray(handle, (float)(Deg2Rad * angle), (byte)255);
+                NativeLeptonicaApiSignatures.pixFindSkew(
+                    new HandleRef(this, pix1),
+                    out angle,
+                    out conf
+                );
+                pix2 = NativeLeptonicaApiSignatures.pixRotateAMGray(
+                    handle,
+                    (float)(Deg2Rad * angle),
+                    (byte)255
+                );
 
                 /* extract the lines to be removed */
                 pix3 = NativeLeptonicaApiSignatures.pixCloseGray(new HandleRef(this, pix2), 51, 1);
@@ -494,23 +606,47 @@ namespace TesseractDotnetWrapper
                 pix4 = NativeLeptonicaApiSignatures.pixErodeGray(new HandleRef(this, pix3), 1, 5);
 
                 /* clean the background of those lines */
-                pix5 = NativeLeptonicaApiSignatures.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), 210, 255);
+                pix5 = NativeLeptonicaApiSignatures.pixThresholdToValue(
+                    new HandleRef(this, IntPtr.Zero),
+                    new HandleRef(this, pix4),
+                    210,
+                    255
+                );
 
-                pix6 = NativeLeptonicaApiSignatures.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix5), 200, 0);
+                pix6 = NativeLeptonicaApiSignatures.pixThresholdToValue(
+                    new HandleRef(this, IntPtr.Zero),
+                    new HandleRef(this, pix5),
+                    200,
+                    0
+                );
 
                 /* get paint-through mask for changed pixels */
-                pix7 = NativeLeptonicaApiSignatures.pixThresholdToBinary(new HandleRef(this, pix6), 210);
+                pix7 = NativeLeptonicaApiSignatures.pixThresholdToBinary(
+                    new HandleRef(this, pix6),
+                    210
+                );
 
                 /* add the inverted, cleaned lines to orig.  Because
                  * the background was cleaned, the inversion is 0,
                  * so when you add, it doesn't lighten those pixels.
                  * It only lightens (to white) the pixels in the lines! */
-                NativeLeptonicaApiSignatures.pixInvert(new HandleRef(this, pix6), new HandleRef(this, pix6));
-                pix8 = NativeLeptonicaApiSignatures.pixAddGray(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix2), new HandleRef(this, pix6));
+                NativeLeptonicaApiSignatures.pixInvert(
+                    new HandleRef(this, pix6),
+                    new HandleRef(this, pix6)
+                );
+                pix8 = NativeLeptonicaApiSignatures.pixAddGray(
+                    new HandleRef(this, IntPtr.Zero),
+                    new HandleRef(this, pix2),
+                    new HandleRef(this, pix6)
+                );
 
                 pix9 = NativeLeptonicaApiSignatures.pixOpenGray(new HandleRef(this, pix8), 1, 9);
 
-                NativeLeptonicaApiSignatures.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
+                NativeLeptonicaApiSignatures.pixCombineMasked(
+                    new HandleRef(this, pix8),
+                    new HandleRef(this, pix9),
+                    new HandleRef(this, pix7)
+                );
                 if (pix8 == IntPtr.Zero)
                 {
                     throw new TesseractException("Failed to remove lines from image.");
@@ -520,7 +656,7 @@ namespace TesseractDotnetWrapper
             }
             finally
             {
-                // destroy any created intermediate pix's, regardless of if the process 
+                // destroy any created intermediate pix's, regardless of if the process
                 // failed for any reason.
                 if (pix1 != IntPtr.Zero)
                 {
@@ -592,25 +728,63 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public Pix Despeckle(string selStr, int selSize)
         {
-            IntPtr pix1, pix2, pix3;
-            IntPtr pix4, pix5, pix6;
-            IntPtr sel1, sel2;
+            IntPtr pix1,
+                pix2,
+                pix3;
+            IntPtr pix4,
+                pix5,
+                pix6;
+            IntPtr sel1,
+                sel2;
 
             /*  Normalize for rapidly varying background */
             pix1 = NativeLeptonicaApiSignatures.pixBackgroundNormFlex(handle, 7, 7, 1, 1, 10);
 
             /* Remove the background */
-            pix2 = NativeLeptonicaApiSignatures.pixGammaTRCMasked(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix1), new HandleRef(this, IntPtr.Zero), 1.0f, 100, 175);
-            
+            pix2 = NativeLeptonicaApiSignatures.pixGammaTRCMasked(
+                new HandleRef(this, IntPtr.Zero),
+                new HandleRef(this, pix1),
+                new HandleRef(this, IntPtr.Zero),
+                1.0f,
+                100,
+                175
+            );
+
             /* Binarize */
-            pix3 = NativeLeptonicaApiSignatures.pixThresholdToBinary(new HandleRef(this, pix2), 180);
+            pix3 = NativeLeptonicaApiSignatures.pixThresholdToBinary(
+                new HandleRef(this, pix2),
+                180
+            );
 
             /* Remove the speckle noise up to selSize x selSize */
-            sel1 = NativeLeptonicaApiSignatures.selCreateFromString(selStr, selSize + 2, selSize + 2, "speckle" + selSize);
-            pix4 = NativeLeptonicaApiSignatures.pixHMT(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix3), new HandleRef(this, sel1));
-            sel2 = NativeLeptonicaApiSignatures.selCreateBrick(selSize, selSize, 0, 0, SelType.SEL_HIT);
-            pix5 = NativeLeptonicaApiSignatures.pixDilate(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), new HandleRef(this, sel2));
-            pix6 = NativeLeptonicaApiSignatures.pixSubtract(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix3), new HandleRef(this, pix5));
+            sel1 = NativeLeptonicaApiSignatures.selCreateFromString(
+                selStr,
+                selSize + 2,
+                selSize + 2,
+                "speckle" + selSize
+            );
+            pix4 = NativeLeptonicaApiSignatures.pixHMT(
+                new HandleRef(this, IntPtr.Zero),
+                new HandleRef(this, pix3),
+                new HandleRef(this, sel1)
+            );
+            sel2 = NativeLeptonicaApiSignatures.selCreateBrick(
+                selSize,
+                selSize,
+                0,
+                0,
+                SelType.SEL_HIT
+            );
+            pix5 = NativeLeptonicaApiSignatures.pixDilate(
+                new HandleRef(this, IntPtr.Zero),
+                new HandleRef(this, pix4),
+                new HandleRef(this, sel2)
+            );
+            pix6 = NativeLeptonicaApiSignatures.pixSubtract(
+                new HandleRef(this, IntPtr.Zero),
+                new HandleRef(this, pix3),
+                new HandleRef(this, pix5)
+            );
 
             NativeLeptonicaApiSignatures.selDestroy(ref sel1);
             NativeLeptonicaApiSignatures.selDestroy(ref sel2);
@@ -690,9 +864,20 @@ namespace TesseractDotnetWrapper
         /// <returns>Returns deskewed image if confidence was high enough, otherwise returns clone of original pix.</returns>
         public Pix Deskew(ScewSweep sweep, int redSearch, int thresh, out Scew scew)
         {
-            float pAngle, pConf;
-            var resultPixHandle = NativeLeptonicaApiSignatures.pixDeskewGeneral(handle, sweep.Reduction, sweep.Range, sweep.Delta, redSearch, thresh, out pAngle, out pConf);
-            if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to deskew image.");
+            float pAngle,
+                pConf;
+            var resultPixHandle = NativeLeptonicaApiSignatures.pixDeskewGeneral(
+                handle,
+                sweep.Reduction,
+                sweep.Range,
+                sweep.Delta,
+                redSearch,
+                thresh,
+                out pAngle,
+                out pConf
+            );
+            if (resultPixHandle == IntPtr.Zero)
+                throw new TesseractException("Failed to deskew image.");
             scew = new Scew(pAngle, pConf);
             return new Pix(resultPixHandle);
         }
@@ -725,12 +910,21 @@ namespace TesseractDotnetWrapper
         /// <param name="width">The original width; use 0 to avoid embedding</param>
         /// <param name="height">The original height; use 0 to avoid embedding</param>
         /// <returns>The image rotated around it's centre.</returns>
-        public Pix Rotate(float angleInRadians, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
+        public Pix Rotate(
+            float angleInRadians,
+            RotationMethod method = RotationMethod.AreaMap,
+            RotationFill fillColor = RotationFill.White,
+            int? width = null,
+            int? height = null
+        )
         {
-            if (width == null) width = this.Width;
-            if (height == null) height = this.Height;
+            if (width == null)
+                width = this.Width;
+            if (height == null)
+                height = this.Height;
 
-            if (Math.Abs(angleInRadians) < VerySmallAngle) return this.Clone();
+            if (Math.Abs(angleInRadians) < VerySmallAngle)
+                return this.Clone();
 
             IntPtr resultHandle;
 
@@ -743,10 +937,18 @@ namespace TesseractDotnetWrapper
             else
             {
                 // handle general case
-                resultHandle = NativeLeptonicaApiSignatures.pixRotate(handle, angleInRadians, method, fillColor, width.Value, height.Value);
+                resultHandle = NativeLeptonicaApiSignatures.pixRotate(
+                    handle,
+                    angleInRadians,
+                    method,
+                    fillColor,
+                    width.Value,
+                    height.Value
+                );
             }
 
-            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around its centre.");
+            if (resultHandle == IntPtr.Zero)
+                throw new LeptonicaException("Failed to rotate image around its centre.");
 
             return new Pix(resultHandle);
         }
@@ -766,13 +968,17 @@ namespace TesseractDotnetWrapper
             }
             return new Pix(resultHandle);
         }
+
         /// <summary>
         /// Inverts pix.
         /// </summary>
         /// <returns></returns>
         public Pix Invert()
         {
-            IntPtr resultHandle = NativeLeptonicaApiSignatures.pixInvert(new HandleRef(this, IntPtr.Zero), handle);
+            IntPtr resultHandle = NativeLeptonicaApiSignatures.pixInvert(
+                new HandleRef(this, IntPtr.Zero),
+                handle
+            );
 
             if (resultHandle == IntPtr.Zero)
             {
@@ -780,6 +986,7 @@ namespace TesseractDotnetWrapper
             }
             return new Pix(resultHandle);
         }
+
         /// <summary>
         /// Top-level conversion to 8 bpp.
         /// </summary>
@@ -802,7 +1009,7 @@ namespace TesseractDotnetWrapper
 
 
         /// <summary>
-        /// Scales the current pix by the specified <paramref name="scaleX"/> and <paramref name="scaleY"/> factors returning a new <see cref="Pix"/> of the same depth. 
+        /// Scales the current pix by the specified <paramref name="scaleX"/> and <paramref name="scaleY"/> factors returning a new <see cref="Pix"/> of the same depth.
         /// </summary>
         /// <param name="scaleX"></param>
         /// <param name="scaleY"></param>
@@ -921,7 +1128,8 @@ namespace TesseractDotnetWrapper
         {
             IntPtr result = NativeLeptonicaApiSignatures.pixScale(handle, scaleX, scaleY);
 
-            if (result == IntPtr.Zero) throw new InvalidOperationException("Failed to scale pix.");
+            if (result == IntPtr.Zero)
+                throw new InvalidOperationException("Failed to scale pix.");
 
             return new Pix(result);
         }

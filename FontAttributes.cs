@@ -18,8 +18,7 @@ namespace TesseractDotnetWrapper
         public bool IsSmallCaps { get; private set; }
         public int PointSize { get; private set; }
 
-        public FontAttributes(
-            FontInfo fontInfo, bool isUnderlined, bool isSmallCaps, int pointSize)
+        public FontAttributes(FontInfo fontInfo, bool isUnderlined, bool isSmallCaps, int pointSize)
         {
             FontInfo = fontInfo;
             IsUnderlined = isUnderlined;

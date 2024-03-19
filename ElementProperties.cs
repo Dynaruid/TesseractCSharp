@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TesseractDotnetWrapper
 {
-	/// <summary>
-	/// Represents properties that describe a text block's orientation.
-	/// </summary>
+    /// <summary>
+    /// Represents properties that describe a text block's orientation.
+    /// </summary>
     public struct ElementProperties
     {
         private Orientation orientation;
@@ -14,7 +14,12 @@ namespace TesseractDotnetWrapper
         private WritingDirection writingDirection;
         private float deskewAngle;
 
-        public ElementProperties(Orientation orientation, TextLineOrder textLineOrder, WritingDirection writingDirection, float deskewAngle)
+        public ElementProperties(
+            Orientation orientation,
+            TextLineOrder textLineOrder,
+            WritingDirection writingDirection,
+            float deskewAngle
+        )
         {
             this.orientation = orientation;
             this.textLineOrder = textLineOrder;

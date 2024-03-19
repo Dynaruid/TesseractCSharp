@@ -10,7 +10,7 @@ namespace TesseractDotnetWrapper
     public sealed class ChoiceIterator : DisposableBase
     {
         private readonly HandleRef _handleRef;
-        
+
         internal ChoiceIterator(IntPtr handle)
         {
             this._handleRef = new HandleRef(this, handle);
@@ -29,7 +29,7 @@ namespace TesseractDotnetWrapper
         }
 
         /// <summary>
-        /// Returns the confidence of the current choice.        
+        /// Returns the confidence of the current choice.
         /// </summary>
         /// <remarks>
         /// The number should be interpreted as a percent probability. (0.0f-100.0f)
@@ -51,9 +51,9 @@ namespace TesseractDotnetWrapper
         public string GetText()
         {
             VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)            
+            if (_handleRef.Handle == IntPtr.Zero)
                 return String.Empty;
-            
+
             return Interop.TessApi.ChoiceIteratorGetUTF8Text(_handleRef);
         }
 

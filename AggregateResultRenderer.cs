@@ -17,7 +17,10 @@ namespace TesseractDotnetWrapper
             private readonly AggregateResultRenderer _renderer;
             private List<IDisposable> _children;
 
-            public EndDocumentOnDispose(AggregateResultRenderer renderer, IEnumerable<IDisposable> children)
+            public EndDocumentOnDispose(
+                AggregateResultRenderer renderer,
+                IEnumerable<IDisposable> children
+            )
             {
                 _renderer = renderer;
                 _children = new List<IDisposable>(children);
@@ -25,11 +28,16 @@ namespace TesseractDotnetWrapper
 
             protected override void Dispose(bool disposing)
             {
-                if (disposing) {
-                    Guard.Verify(_renderer._currentDocumentHandle == this, "Expected the Result Render's active document to be this document.");
+                if (disposing)
+                {
+                    Guard.Verify(
+                        _renderer._currentDocumentHandle == this,
+                        "Expected the Result Render's active document to be this document."
+                    );
 
                     // End the renderer
-                    foreach (var child in _children) {
+                    foreach (var child in _children)
+                    {
                         child.Dispose();
                     }
                     _children = null;
@@ -49,9 +57,7 @@ namespace TesseractDotnetWrapper
         /// </summary>
         /// <param name="resultRenderers">The child result renderers.</param>
         public AggregateResultRenderer(params IResultRenderer[] resultRenderers)
-            : this((IEnumerable<IResultRenderer>)resultRenderers)
-        {
-        }
+            : this((IEnumerable<IResultRenderer>)resultRenderers) { }
 
         /// <summary>
         /// Create a new aggregate result renderer with the specified child result renderers.
@@ -91,8 +97,10 @@ namespace TesseractDotnetWrapper
             VerifyNotDisposed();
 
             _pageNumber++;
-            foreach (var renderer in ResultRenderers) {
-                if (!renderer.AddPage(page)) {
+            foreach (var renderer in ResultRenderers)
+            {
+                if (!renderer.AddPage(page))
+                {
                     return false;
                 }
             }
@@ -109,27 +117,43 @@ namespace TesseractDotnetWrapper
         {
             Guard.RequireNotNull("title", title);
             VerifyNotDisposed();
-            Guard.Verify(_currentDocumentHandle == null, "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
+            Guard.Verify(
+                _currentDocumentHandle == null,
+                "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.",
+                title
+            );
 
             // Reset the page numer
             _pageNumber = -1;
 
             // Begin the document on each child renderer.
             List<IDisposable> children = new List<IDisposable>();
-            try {
-                foreach (var renderer in ResultRenderers) {
+            try
+            {
+                foreach (var renderer in ResultRenderers)
+                {
                     children.Add(renderer.BeginDocument(title));
                 }
 
                 _currentDocumentHandle = new EndDocumentOnDispose(this, children);
                 return _currentDocumentHandle;
-            } catch (Exception error) {
+            }
+            catch (Exception error)
+            {
                 // Dispose of all previously created child document's iff an error occured to prevent a memory leak.
-                foreach (var child in children) {
-                    try {
+                foreach (var child in children)
+                {
+                    try
+                    {
                         child.Dispose();
-                    } catch (Exception disposalError) {
-                        Logger.TraceError("Failed to dispose of child document {0}: {1}", child, disposalError.Message);
+                    }
+                    catch (Exception disposalError)
+                    {
+                        Logger.TraceError(
+                            "Failed to dispose of child document {0}: {1}",
+                            child,
+                            disposalError.Message
+                        );
                     }
                 }
 
@@ -139,17 +163,23 @@ namespace TesseractDotnetWrapper
 
         protected override void Dispose(bool disposing)
         {
-            try {
-                if (disposing) {
+            try
+            {
+                if (disposing)
+                {
                     // Ensure that if the renderer has an active document when disposed it too is disposed off.
-                    if (_currentDocumentHandle != null) {
+                    if (_currentDocumentHandle != null)
+                    {
                         _currentDocumentHandle.Dispose();
                         _currentDocumentHandle = null;
                     }
                 }
-            } finally {
+            }
+            finally
+            {
                 // dispose of result renderers
-                foreach (var renderer in ResultRenderers) {
+                foreach (var renderer in ResultRenderers)
+                {
                     renderer.Dispose();
                 }
                 _resultRenderers = null;

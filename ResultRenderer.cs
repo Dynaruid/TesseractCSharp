@@ -11,7 +11,16 @@ namespace TesseractDotnetWrapper
     /// </summary>
     public enum RenderedFormat
     {
-        TEXT, HOCR, PDF, PDF_TEXTONLY, UNLV, BOX, ALTO, TSV, LSTMBOX, WORDSTRBOX
+        TEXT,
+        HOCR,
+        PDF,
+        PDF_TEXTONLY,
+        UNLV,
+        BOX,
+        ALTO,
+        TSV,
+        LSTMBOX,
+        WORDSTRBOX
     }
 
     /// <summary>
@@ -33,7 +42,11 @@ namespace TesseractDotnetWrapper
         /// <param name="dataPath">The directory containing the pdf font data, normally same as your tessdata directory.</param>
         /// <param name="outputFormats"></param>
         /// <returns></returns>
-        public static IEnumerable<IResultRenderer> CreateRenderers(string outputbase, string dataPath, List<RenderedFormat> outputFormats)
+        public static IEnumerable<IResultRenderer> CreateRenderers(
+            string outputbase,
+            string dataPath,
+            List<RenderedFormat> outputFormats
+        )
         {
             List<IResultRenderer> renderers = new List<IResultRenderer>();
 
@@ -87,7 +100,11 @@ namespace TesseractDotnetWrapper
         /// <param name="fontDirectory">The directory containing the pdf font data, normally same as your tessdata directory.</param>
         /// <param name="textonly">skip images if set</param>
         /// <returns></returns>
-        public static IResultRenderer CreatePdfRenderer(string outputFilename, string fontDirectory, bool textonly)
+        public static IResultRenderer CreatePdfRenderer(
+            string outputFilename,
+            string fontDirectory,
+            bool textonly
+        )
         {
             return new PdfResultRenderer(outputFilename, fontDirectory, textonly);
         }
@@ -110,7 +127,10 @@ namespace TesseractDotnetWrapper
         /// <param name="outputFilename">The path to the hocr file to be generated without the file extension.</param>
         /// <param name="fontInfo">Determines if the generated HOCR file includes font information or not.</param>
         /// <returns></returns>
-        public static IResultRenderer CreateHOcrRenderer(string outputFilename, bool fontInfo = false)
+        public static IResultRenderer CreateHOcrRenderer(
+            string outputFilename,
+            bool fontInfo = false
+        )
         {
             return new HOcrResultRenderer(outputFilename, fontInfo);
         }
@@ -202,7 +222,10 @@ namespace TesseractDotnetWrapper
                 {
                     if (disposing)
                     {
-                        Guard.Verify(_renderer._currentDocumentHandle == this, "Expected the Result Render's active document to be this document.");
+                        Guard.Verify(
+                            _renderer._currentDocumentHandle == this,
+                            "Expected the Result Render's active document to be this document."
+                        );
 
                         // End the renderer
                         NativeTessApiSignatures.ResultRendererEndDocument(_renderer._handle);
@@ -236,7 +259,10 @@ namespace TesseractDotnetWrapper
         protected void Initialise(IntPtr handle)
         {
             Guard.Require("handle", handle != IntPtr.Zero, "handle must be initialised.");
-            Guard.Verify(_handle.Handle == IntPtr.Zero, "Rensult renderer has already been initialised.");
+            Guard.Verify(
+                _handle.Handle == IntPtr.Zero,
+                "Rensult renderer has already been initialised."
+            );
 
             _handle = new HandleRef(this, handle);
         }
@@ -268,7 +294,11 @@ namespace TesseractDotnetWrapper
         {
             Guard.RequireNotNull("title", title);
             VerifyNotDisposed();
-            Guard.Verify(_currentDocumentHandle == null, "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
+            Guard.Verify(
+                _currentDocumentHandle == null,
+                "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.",
+                title
+            );
 
             IntPtr titlePtr = Marshal.StringToHGlobalAnsi(title);
             if (NativeTessApiSignatures.ResultRendererBeginDocument(Handle, titlePtr) == 0)
@@ -276,7 +306,9 @@ namespace TesseractDotnetWrapper
                 // release the pointer first before throwing an error.
                 Marshal.FreeHGlobal(titlePtr);
 
-                throw new InvalidOperationException(String.Format("Failed to begin document \"{0}\".", title));
+                throw new InvalidOperationException(
+                    String.Format("Failed to begin document \"{0}\".", title)
+                );
             }
 
             _currentDocumentHandle = new EndDocumentOnDispose(this, titlePtr);
@@ -336,7 +368,10 @@ namespace TesseractDotnetWrapper
     {
         public HOcrResultRenderer(string outputFilename, bool fontInfo = false)
         {
-            var rendererHandle = NativeTessApiSignatures.HOcrRendererCreate2(outputFilename, fontInfo ? 1 : 0);
+            var rendererHandle = NativeTessApiSignatures.HOcrRendererCreate2(
+                outputFilename,
+                fontInfo ? 1 : 0
+            );
             Initialise(rendererHandle);
         }
     }
@@ -402,7 +437,11 @@ namespace TesseractDotnetWrapper
         public PdfResultRenderer(string outputFilename, string fontDirectory, bool textonly)
         {
             var fontDirectoryHandle = Marshal.StringToHGlobalAnsi(fontDirectory);
-            var rendererHandle = NativeTessApiSignatures.PDFRendererCreate(outputFilename, fontDirectoryHandle, textonly ? 1 : 0);
+            var rendererHandle = NativeTessApiSignatures.PDFRendererCreate(
+                outputFilename,
+                fontDirectoryHandle,
+                textonly ? 1 : 0
+            );
 
             Initialise(rendererHandle);
         }

@@ -7,9 +7,9 @@ namespace TesseractDotnetWrapper
     public enum PageIteratorLevel : int
     {
         Block,
-        Para, 
-        TextLine, 
-        Word, 
+        Para,
+        TextLine,
+        Word,
         Symbol
     }
 }
