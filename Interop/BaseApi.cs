@@ -25,19 +25,27 @@ namespace TesseractDotnetWrapper.Interop
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                //windows
                 NativeTess = new NativeTessApiWindows();
                 NativeLeptonica = new NativeLeptonicaApiWindow();
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                NativeTess = new NativeTessApiWindows();
-                NativeLeptonica = new NativeLeptonicaApiWindow();
-            }
-            else
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 //macos
                 NativeTess = new NativeTessApiMacos();
                 NativeLeptonica = new NativeLeptonicaApiMacos();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                //linux
+                NativeTess = new NativeTessApiLinux();
+                NativeLeptonica = new NativeLeptonicaApiLinux();
+            }
+            else
+            {
+                //unknown...
+                NativeTess = new NativeTessApiWindows();
+                NativeLeptonica = new NativeLeptonicaApiWindow();
             }
         }
 
