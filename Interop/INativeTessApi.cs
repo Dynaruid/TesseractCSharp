@@ -136,12 +136,14 @@ namespace TesseractDotnetWrapper.Interop
         IntPtr ResultIteratorGetPageIterator(HandleRef handle);
         IntPtr ResultIteratorGetUTF8TextInternal(HandleRef handle, PageIteratorLevel level);
 
+        #region Choice Iterator
+
         IntPtr ResultIteratorGetChoiceIterator(HandleRef handle);
         void ChoiceIteratorDelete(HandleRef handle);
         int ChoiceIteratorNext(HandleRef handle);
         IntPtr ChoiceIteratorGetUTF8TextInternal(HandleRef handle);
         float ChoiceIteratorGetConfidence(HandleRef handle);
-
+        #endregion Choice Iterator
         int BaseApiPrintVariablesToFile(HandleRef handle, string filename);
         #region Renderer API
         IntPtr TextRendererCreate(string outputbase);
@@ -160,6 +162,9 @@ namespace TesseractDotnetWrapper.Interop
         int ResultRendererBeginDocument(HandleRef renderer, IntPtr titlePtr);
         int ResultRendererAddImage(HandleRef renderer, HandleRef api);
         int ResultRendererEndDocument(HandleRef renderer);
+        IntPtr ResultRendererExtention(HandleRef renderer);
+        IntPtr ResultRendererTitle(HandleRef renderer);
+        int ResultRendererImageNum(HandleRef renderer);
 
         #endregion Renderer API
     }

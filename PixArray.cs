@@ -22,7 +22,7 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public static PixArray LoadMultiPageTiffFromFile(string filename)
         {
-            var pixaHandle = NativeLeptonicaApiSignatures.pixaReadMultipageTiff(filename);
+            var pixaHandle = TessApi.NativeLeptonica.pixaReadMultipageTiff(filename);
             if (pixaHandle == IntPtr.Zero)
             {
                 throw new IOException(String.Format("Failed to load image '{0}'.", filename));
@@ -33,7 +33,7 @@ namespace TesseractDotnetWrapper
 
         public static PixArray Create(int n)
         {
-            var pixaHandle = NativeLeptonicaApiSignatures.pixaCreate(n);
+            var pixaHandle = TessApi.NativeLeptonica.pixaCreate(n);
             if (pixaHandle == IntPtr.Zero)
             {
                 throw new IOException("Failed to create PixArray");
@@ -197,7 +197,7 @@ namespace TesseractDotnetWrapper
             version = 1;
 
             // These will need to be updated whenever the PixA structure changes (i.e. a Pix is added or removed) though at the moment that isn't a problem.
-            _count = NativeLeptonicaApiSignatures.pixaGetCount(_handle);
+            _count = TessApi.NativeLeptonica.pixaGetCount(_handle);
         }
 
         #endregion
@@ -240,10 +240,10 @@ namespace TesseractDotnetWrapper
                 copyflag
             );
 
-            int result = NativeLeptonicaApiSignatures.pixaAddPix(_handle, pix.Handle, copyflag);
+            int result = TessApi.NativeLeptonica.pixaAddPix(_handle, pix.Handle, copyflag);
             if (result == 0)
             {
-                _count = NativeLeptonicaApiSignatures.pixaGetCount(_handle);
+                _count = TessApi.NativeLeptonica.pixaGetCount(_handle);
             }
             return result == 0;
         }
@@ -269,9 +269,9 @@ namespace TesseractDotnetWrapper
             );
 
             VerifyNotDisposed();
-            if (NativeLeptonicaApiSignatures.pixaRemovePix(_handle, index) == 0)
+            if (TessApi.NativeLeptonica.pixaRemovePix(_handle, index) == 0)
             {
-                _count = NativeLeptonicaApiSignatures.pixaGetCount(_handle);
+                _count = TessApi.NativeLeptonica.pixaGetCount(_handle);
             }
         }
 
@@ -281,9 +281,9 @@ namespace TesseractDotnetWrapper
         public void Clear()
         {
             VerifyNotDisposed();
-            if (NativeLeptonicaApiSignatures.pixaClear(_handle) == 0)
+            if (TessApi.NativeLeptonica.pixaClear(_handle) == 0)
             {
-                _count = NativeLeptonicaApiSignatures.pixaGetCount(_handle);
+                _count = TessApi.NativeLeptonica.pixaGetCount(_handle);
             }
         }
 
@@ -311,7 +311,7 @@ namespace TesseractDotnetWrapper
 
             VerifyNotDisposed();
 
-            var pixHandle = NativeLeptonicaApiSignatures.pixaGetPix(_handle, index, accessType);
+            var pixHandle = TessApi.NativeLeptonica.pixaGetPix(_handle, index, accessType);
             if (pixHandle == IntPtr.Zero)
             {
                 throw new InvalidOperationException(
@@ -345,7 +345,7 @@ namespace TesseractDotnetWrapper
         protected override void Dispose(bool disposing)
         {
             IntPtr handle = _handle.Handle;
-            NativeLeptonicaApiSignatures.pixaDestroy(ref handle);
+            TessApi.NativeLeptonica.pixaDestroy(ref handle);
             _handle = new HandleRef(this, handle);
         }
 

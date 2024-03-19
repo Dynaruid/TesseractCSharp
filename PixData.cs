@@ -12,8 +12,8 @@ namespace TesseractDotnetWrapper
         internal PixData(Pix pix)
         {
             Pix = pix;
-            Data = NativeLeptonicaApiSignatures.pixGetData(Pix.Handle);
-            WordsPerLine = NativeLeptonicaApiSignatures.pixGetWpl(Pix.Handle);
+            Data = TessApi.NativeLeptonica.pixGetData(Pix.Handle);
+            WordsPerLine = TessApi.NativeLeptonica.pixGetWpl(Pix.Handle);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace TesseractDotnetWrapper
         /// </remarks>
         public void EndianByteSwap()
         {
-            NativeLeptonicaApiSignatures.pixEndianByteSwap(Pix.Handle);
+            TessApi.NativeLeptonica.pixEndianByteSwap(Pix.Handle);
         }
 
 #if Net45

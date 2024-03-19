@@ -77,7 +77,7 @@ namespace TesseractDotnetWrapper
                     regionOfInterest = value;
 
                     // update region of interest in image
-                    NativeTessApiSignatures.BaseApiSetRectangle(
+                    TessApi.NativeTess.BaseApiSetRectangle(
                         Engine.Handle,
                         regionOfInterest.X1,
                         regionOfInterest.Y1,
@@ -99,7 +99,7 @@ namespace TesseractDotnetWrapper
         {
             Recognize();
 
-            var pixHandle = NativeTessApiSignatures.BaseAPIGetThresholdedImage(Engine.Handle);
+            var pixHandle = TessApi.NativeTess.BaseAPIGetThresholdedImage(Engine.Handle);
             if (pixHandle == IntPtr.Zero)
             {
                 throw new TesseractException("Failed to get thresholded image.");
@@ -119,7 +119,7 @@ namespace TesseractDotnetWrapper
                 "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead."
             );
 
-            var resultIteratorHandle = NativeTessApiSignatures.BaseAPIAnalyseLayout(Engine.Handle);
+            var resultIteratorHandle = TessApi.NativeTess.BaseAPIAnalyseLayout(Engine.Handle);
             return new PageIterator(this, resultIteratorHandle);
         }
 
@@ -130,7 +130,7 @@ namespace TesseractDotnetWrapper
         public ResultIterator GetIterator()
         {
             Recognize();
-            var resultIteratorHandle = NativeTessApiSignatures.BaseApiGetIterator(Engine.Handle);
+            var resultIteratorHandle = TessApi.NativeTess.BaseApiGetIterator(Engine.Handle);
             return new ResultIterator(this, resultIteratorHandle);
         }
 
@@ -263,7 +263,7 @@ namespace TesseractDotnetWrapper
         public float GetMeanConfidence()
         {
             Recognize();
-            return NativeTessApiSignatures.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
+            return TessApi.NativeTess.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
         }
 
         /// <summary>
@@ -273,20 +273,20 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public List<Rectangle> GetSegmentedRegions(PageIteratorLevel pageIteratorLevel)
         {
-            var boxArray = NativeTessApiSignatures.BaseAPIGetComponentImages(
+            var boxArray = TessApi.NativeTess.BaseAPIGetComponentImages(
                 Engine.Handle,
                 pageIteratorLevel,
-                Interop.Constants.TRUE,
+                Interop.NativeConstants.TRUE,
                 IntPtr.Zero,
                 IntPtr.Zero
             );
-            int boxCount = NativeLeptonicaApiSignatures.boxaGetCount(new HandleRef(this, boxArray));
+            int boxCount = TessApi.NativeLeptonica.boxaGetCount(new HandleRef(this, boxArray));
 
             List<Rectangle> boxList = new List<Rectangle>();
 
             for (int i = 0; i < boxCount; i++)
             {
-                var box = NativeLeptonicaApiSignatures.boxaGetBox(
+                var box = TessApi.NativeLeptonica.boxaGetBox(
                     new HandleRef(this, boxArray),
                     i,
                     PixArrayAccessType.Clone
@@ -300,7 +300,7 @@ namespace TesseractDotnetWrapper
                     py,
                     pw,
                     ph;
-                NativeLeptonicaApiSignatures.boxGetGeometry(
+                TessApi.NativeLeptonica.boxGetGeometry(
                     new HandleRef(this, box),
                     out px,
                     out py,
@@ -308,10 +308,10 @@ namespace TesseractDotnetWrapper
                     out ph
                 );
                 boxList.Add(new Rectangle(px, py, pw, ph));
-                NativeLeptonicaApiSignatures.boxDestroy(ref box);
+                TessApi.NativeLeptonica.boxDestroy(ref box);
             }
 
-            NativeLeptonicaApiSignatures.boxaDestroy(ref boxArray);
+            TessApi.NativeLeptonica.boxaDestroy(ref boxArray);
 
             return boxList;
         }
@@ -407,7 +407,7 @@ namespace TesseractDotnetWrapper
             float script_conf;
 
             if (
-                NativeTessApiSignatures.TessBaseAPIDetectOrientationScript(
+                TessApi.NativeTess.TessBaseAPIDetectOrientationScript(
                     Engine.Handle,
                     out orient_deg,
                     out orient_conf,
@@ -444,7 +444,7 @@ namespace TesseractDotnetWrapper
             if (!runRecognitionPhase)
             {
                 if (
-                    NativeTessApiSignatures.BaseApiRecognize(
+                    TessApi.NativeTess.BaseApiRecognize(
                         Engine.Handle,
                         new HandleRef(this, IntPtr.Zero)
                     ) != 0
@@ -497,7 +497,7 @@ namespace TesseractDotnetWrapper
         {
             if (disposing)
             {
-                NativeTessApiSignatures.BaseAPIClear(Engine.Handle);
+                TessApi.NativeTess.BaseAPIClear(Engine.Handle);
             }
         }
     }

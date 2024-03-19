@@ -69,11 +69,11 @@ namespace TesseractDotnetWrapper
                 throw new ArgumentNullException("handle");
 
             this.handle = new HandleRef(this, handle);
-            this.width = NativeLeptonicaApiSignatures.pixGetWidth(this.handle);
-            this.height = NativeLeptonicaApiSignatures.pixGetHeight(this.handle);
-            this.depth = NativeLeptonicaApiSignatures.pixGetDepth(this.handle);
+            this.width = TessApi.NativeLeptonica.pixGetWidth(this.handle);
+            this.height = TessApi.NativeLeptonica.pixGetHeight(this.handle);
+            this.depth = TessApi.NativeLeptonica.pixGetDepth(this.handle);
 
-            var colorMapHandle = NativeLeptonicaApiSignatures.pixGetColormap(this.handle);
+            var colorMapHandle = TessApi.NativeLeptonica.pixGetColormap(this.handle);
             if (colorMapHandle != IntPtr.Zero)
             {
                 this.colormap = new PixColormap(colorMapHandle);
@@ -90,7 +90,7 @@ namespace TesseractDotnetWrapper
             if (height <= 0)
                 throw new ArgumentException("Height must be greater than zero", "height");
 
-            var handle = NativeLeptonicaApiSignatures.pixCreate(width, height, depth);
+            var handle = TessApi.NativeLeptonica.pixCreate(width, height, depth);
             if (handle == IntPtr.Zero)
                 throw new InvalidOperationException(
                     "Failed to create pix, this normally occurs because the requested image size is too large, please check Standard Error Output."
@@ -109,7 +109,7 @@ namespace TesseractDotnetWrapper
 
         public static Pix LoadFromFile(string filename)
         {
-            var pixHandle = NativeLeptonicaApiSignatures.pixRead(filename);
+            var pixHandle = TessApi.NativeLeptonica.pixRead(filename);
             if (pixHandle == IntPtr.Zero)
             {
                 throw new IOException(String.Format("Failed to load image '{0}'.", filename));
@@ -122,7 +122,7 @@ namespace TesseractDotnetWrapper
             IntPtr handle;
             fixed (byte* ptr = bytes)
             {
-                handle = NativeLeptonicaApiSignatures.pixReadMem(ptr, bytes.Length);
+                handle = TessApi.NativeLeptonica.pixReadMem(ptr, bytes.Length);
             }
             if (handle == IntPtr.Zero)
             {
@@ -136,7 +136,7 @@ namespace TesseractDotnetWrapper
             IntPtr handle;
             fixed (byte* ptr = bytes)
             {
-                handle = NativeLeptonicaApiSignatures.pixReadMemTiff(ptr, bytes.Length, 0);
+                handle = TessApi.NativeLeptonica.pixReadMemTiff(ptr, bytes.Length, 0);
             }
             if (handle == IntPtr.Zero)
             {
@@ -148,7 +148,7 @@ namespace TesseractDotnetWrapper
         public static Pix pixReadFromMultipageTiff(string filename, ref int offset)
         {
             IntPtr handle;
-            handle = NativeLeptonicaApiSignatures.pixReadFromMultipageTiff(filename, ref offset);
+            handle = TessApi.NativeLeptonica.pixReadFromMultipageTiff(filename, ref offset);
 
             if (handle == IntPtr.Zero)
             {
@@ -173,14 +173,14 @@ namespace TesseractDotnetWrapper
             {
                 if (value != null)
                 {
-                    if (NativeLeptonicaApiSignatures.pixSetColormap(handle, value.Handle) == 0)
+                    if (TessApi.NativeLeptonica.pixSetColormap(handle, value.Handle) == 0)
                     {
                         colormap = value;
                     }
                 }
                 else
                 {
-                    if (NativeLeptonicaApiSignatures.pixDestroyColormap(handle) == 0)
+                    if (TessApi.NativeLeptonica.pixDestroyColormap(handle) == 0)
                     {
                         colormap = null;
                     }
@@ -205,14 +205,14 @@ namespace TesseractDotnetWrapper
 
         public int XRes
         {
-            get { return NativeLeptonicaApiSignatures.pixGetXRes(this.handle); }
-            set { NativeLeptonicaApiSignatures.pixSetXRes(this.handle, value); }
+            get { return TessApi.NativeLeptonica.pixGetXRes(this.handle); }
+            set { TessApi.NativeLeptonica.pixSetXRes(this.handle, value); }
         }
 
         public int YRes
         {
-            get { return NativeLeptonicaApiSignatures.pixGetYRes(this.handle); }
-            set { NativeLeptonicaApiSignatures.pixSetYRes(this.handle, value); }
+            get { return TessApi.NativeLeptonica.pixGetYRes(this.handle); }
+            set { TessApi.NativeLeptonica.pixSetYRes(this.handle, value); }
         }
 
         internal HandleRef Handle
@@ -246,7 +246,7 @@ namespace TesseractDotnetWrapper
             }
 
             int same;
-            if (NativeLeptonicaApiSignatures.pixEqual(Handle, other.Handle, out same) != 0)
+            if (TessApi.NativeLeptonica.pixEqual(Handle, other.Handle, out same) != 0)
             {
                 throw new TesseractException("Failed to compare pix");
             }
@@ -279,7 +279,7 @@ namespace TesseractDotnetWrapper
                 actualFormat = format.Value;
             }
 
-            if (NativeLeptonicaApiSignatures.pixWrite(filename, handle, actualFormat) != 0)
+            if (TessApi.NativeLeptonica.pixWrite(filename, handle, actualFormat) != 0)
             {
                 throw new IOException(String.Format("Failed to save image '{0}'.", filename));
             }
@@ -309,7 +309,7 @@ namespace TesseractDotnetWrapper
         /// <returns>The pix with it's reference count incremented.</returns>
         public Pix Clone()
         {
-            var clonedHandle = NativeLeptonicaApiSignatures.pixClone(handle);
+            var clonedHandle = TessApi.NativeLeptonica.pixClone(handle);
             return new Pix(clonedHandle);
         }
 
@@ -343,7 +343,7 @@ namespace TesseractDotnetWrapper
 
             IntPtr ppixth,
                 ppixd;
-            int result = NativeLeptonicaApiSignatures.pixOtsuAdaptiveThreshold(
+            int result = TessApi.NativeLeptonica.pixOtsuAdaptiveThreshold(
                 handle,
                 sx,
                 sy,
@@ -357,7 +357,7 @@ namespace TesseractDotnetWrapper
             if (ppixth != IntPtr.Zero)
             {
                 // free memory held by ppixth, an array of threshold values found for each tile
-                NativeLeptonicaApiSignatures.pixDestroy(ref ppixth);
+                TessApi.NativeLeptonica.pixDestroy(ref ppixth);
             }
 
             if (result == 1)
@@ -418,7 +418,7 @@ namespace TesseractDotnetWrapper
                 ppixsd,
                 ppixth,
                 ppixd;
-            int result = NativeLeptonicaApiSignatures.pixSauvolaBinarize(
+            int result = TessApi.NativeLeptonica.pixSauvolaBinarize(
                 handle,
                 whsize,
                 factor,
@@ -433,17 +433,17 @@ namespace TesseractDotnetWrapper
 
             if (ppixm != IntPtr.Zero)
             {
-                NativeLeptonicaApiSignatures.pixDestroy(ref ppixm);
+                TessApi.NativeLeptonica.pixDestroy(ref ppixm);
             }
 
             if (ppixsd != IntPtr.Zero)
             {
-                NativeLeptonicaApiSignatures.pixDestroy(ref ppixsd);
+                TessApi.NativeLeptonica.pixDestroy(ref ppixsd);
             }
 
             if (ppixth != IntPtr.Zero)
             {
-                NativeLeptonicaApiSignatures.pixDestroy(ref ppixth);
+                TessApi.NativeLeptonica.pixDestroy(ref ppixth);
             }
 
             if (result == 1)
@@ -491,7 +491,7 @@ namespace TesseractDotnetWrapper
 
             IntPtr ppixth,
                 ppixd;
-            int result = NativeLeptonicaApiSignatures.pixSauvolaBinarizeTiled(
+            int result = TessApi.NativeLeptonica.pixSauvolaBinarizeTiled(
                 handle,
                 whsize,
                 factor,
@@ -504,7 +504,7 @@ namespace TesseractDotnetWrapper
             // Free memory held by other unused pix's
             if (ppixth != IntPtr.Zero)
             {
-                NativeLeptonicaApiSignatures.pixDestroy(ref ppixth);
+                TessApi.NativeLeptonica.pixDestroy(ref ppixth);
             }
 
             if (result == 1)
@@ -539,7 +539,7 @@ namespace TesseractDotnetWrapper
                 "All weights must be greater than or equal to zero; blue was not."
             );
 
-            var resultPixHandle = NativeLeptonicaApiSignatures.pixConvertRGBToGray(
+            var resultPixHandle = TessApi.NativeLeptonica.pixConvertRGBToGray(
                 handle,
                 rwt,
                 gwt,
@@ -584,36 +584,32 @@ namespace TesseractDotnetWrapper
             try
             {
                 /* threshold to binary, extracting much of the lines */
-                pix1 = NativeLeptonicaApiSignatures.pixThresholdToBinary(handle, 170);
+                pix1 = TessApi.NativeLeptonica.pixThresholdToBinary(handle, 170);
 
                 /* find the skew angle and deskew using an interpolated
                  * rotator for anti-aliasing (to avoid jaggies) */
-                NativeLeptonicaApiSignatures.pixFindSkew(
-                    new HandleRef(this, pix1),
-                    out angle,
-                    out conf
-                );
-                pix2 = NativeLeptonicaApiSignatures.pixRotateAMGray(
+                TessApi.NativeLeptonica.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
+                pix2 = TessApi.NativeLeptonica.pixRotateAMGray(
                     handle,
                     (float)(Deg2Rad * angle),
                     (byte)255
                 );
 
                 /* extract the lines to be removed */
-                pix3 = NativeLeptonicaApiSignatures.pixCloseGray(new HandleRef(this, pix2), 51, 1);
+                pix3 = TessApi.NativeLeptonica.pixCloseGray(new HandleRef(this, pix2), 51, 1);
 
                 /* solidify the lines to be removed */
-                pix4 = NativeLeptonicaApiSignatures.pixErodeGray(new HandleRef(this, pix3), 1, 5);
+                pix4 = TessApi.NativeLeptonica.pixErodeGray(new HandleRef(this, pix3), 1, 5);
 
                 /* clean the background of those lines */
-                pix5 = NativeLeptonicaApiSignatures.pixThresholdToValue(
+                pix5 = TessApi.NativeLeptonica.pixThresholdToValue(
                     new HandleRef(this, IntPtr.Zero),
                     new HandleRef(this, pix4),
                     210,
                     255
                 );
 
-                pix6 = NativeLeptonicaApiSignatures.pixThresholdToValue(
+                pix6 = TessApi.NativeLeptonica.pixThresholdToValue(
                     new HandleRef(this, IntPtr.Zero),
                     new HandleRef(this, pix5),
                     200,
@@ -621,28 +617,25 @@ namespace TesseractDotnetWrapper
                 );
 
                 /* get paint-through mask for changed pixels */
-                pix7 = NativeLeptonicaApiSignatures.pixThresholdToBinary(
-                    new HandleRef(this, pix6),
-                    210
-                );
+                pix7 = TessApi.NativeLeptonica.pixThresholdToBinary(new HandleRef(this, pix6), 210);
 
                 /* add the inverted, cleaned lines to orig.  Because
                  * the background was cleaned, the inversion is 0,
                  * so when you add, it doesn't lighten those pixels.
                  * It only lightens (to white) the pixels in the lines! */
-                NativeLeptonicaApiSignatures.pixInvert(
+                TessApi.NativeLeptonica.pixInvert(
                     new HandleRef(this, pix6),
                     new HandleRef(this, pix6)
                 );
-                pix8 = NativeLeptonicaApiSignatures.pixAddGray(
+                pix8 = TessApi.NativeLeptonica.pixAddGray(
                     new HandleRef(this, IntPtr.Zero),
                     new HandleRef(this, pix2),
                     new HandleRef(this, pix6)
                 );
 
-                pix9 = NativeLeptonicaApiSignatures.pixOpenGray(new HandleRef(this, pix8), 1, 9);
+                pix9 = TessApi.NativeLeptonica.pixOpenGray(new HandleRef(this, pix8), 1, 9);
 
-                NativeLeptonicaApiSignatures.pixCombineMasked(
+                TessApi.NativeLeptonica.pixCombineMasked(
                     new HandleRef(this, pix8),
                     new HandleRef(this, pix9),
                     new HandleRef(this, pix7)
@@ -660,42 +653,42 @@ namespace TesseractDotnetWrapper
                 // failed for any reason.
                 if (pix1 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix1);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix1);
                 }
 
                 if (pix2 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix2);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix2);
                 }
 
                 if (pix3 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix3);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix3);
                 }
 
                 if (pix4 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix4);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix4);
                 }
 
                 if (pix5 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix5);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix5);
                 }
 
                 if (pix6 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix6);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix6);
                 }
 
                 if (pix7 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix7);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix7);
                 }
 
                 if (pix9 != IntPtr.Zero)
                 {
-                    NativeLeptonicaApiSignatures.pixDestroy(ref pix9);
+                    TessApi.NativeLeptonica.pixDestroy(ref pix9);
                 }
             }
         }
@@ -738,10 +731,10 @@ namespace TesseractDotnetWrapper
                 sel2;
 
             /*  Normalize for rapidly varying background */
-            pix1 = NativeLeptonicaApiSignatures.pixBackgroundNormFlex(handle, 7, 7, 1, 1, 10);
+            pix1 = TessApi.NativeLeptonica.pixBackgroundNormFlex(handle, 7, 7, 1, 1, 10);
 
             /* Remove the background */
-            pix2 = NativeLeptonicaApiSignatures.pixGammaTRCMasked(
+            pix2 = TessApi.NativeLeptonica.pixGammaTRCMasked(
                 new HandleRef(this, IntPtr.Zero),
                 new HandleRef(this, pix1),
                 new HandleRef(this, IntPtr.Zero),
@@ -751,49 +744,40 @@ namespace TesseractDotnetWrapper
             );
 
             /* Binarize */
-            pix3 = NativeLeptonicaApiSignatures.pixThresholdToBinary(
-                new HandleRef(this, pix2),
-                180
-            );
+            pix3 = TessApi.NativeLeptonica.pixThresholdToBinary(new HandleRef(this, pix2), 180);
 
             /* Remove the speckle noise up to selSize x selSize */
-            sel1 = NativeLeptonicaApiSignatures.selCreateFromString(
+            sel1 = TessApi.NativeLeptonica.selCreateFromString(
                 selStr,
                 selSize + 2,
                 selSize + 2,
                 "speckle" + selSize
             );
-            pix4 = NativeLeptonicaApiSignatures.pixHMT(
+            pix4 = TessApi.NativeLeptonica.pixHMT(
                 new HandleRef(this, IntPtr.Zero),
                 new HandleRef(this, pix3),
                 new HandleRef(this, sel1)
             );
-            sel2 = NativeLeptonicaApiSignatures.selCreateBrick(
-                selSize,
-                selSize,
-                0,
-                0,
-                SelType.SEL_HIT
-            );
-            pix5 = NativeLeptonicaApiSignatures.pixDilate(
+            sel2 = TessApi.NativeLeptonica.selCreateBrick(selSize, selSize, 0, 0, SelType.SEL_HIT);
+            pix5 = TessApi.NativeLeptonica.pixDilate(
                 new HandleRef(this, IntPtr.Zero),
                 new HandleRef(this, pix4),
                 new HandleRef(this, sel2)
             );
-            pix6 = NativeLeptonicaApiSignatures.pixSubtract(
+            pix6 = TessApi.NativeLeptonica.pixSubtract(
                 new HandleRef(this, IntPtr.Zero),
                 new HandleRef(this, pix3),
                 new HandleRef(this, pix5)
             );
 
-            NativeLeptonicaApiSignatures.selDestroy(ref sel1);
-            NativeLeptonicaApiSignatures.selDestroy(ref sel2);
+            TessApi.NativeLeptonica.selDestroy(ref sel1);
+            TessApi.NativeLeptonica.selDestroy(ref sel2);
 
-            NativeLeptonicaApiSignatures.pixDestroy(ref pix1);
-            NativeLeptonicaApiSignatures.pixDestroy(ref pix2);
-            NativeLeptonicaApiSignatures.pixDestroy(ref pix3);
-            NativeLeptonicaApiSignatures.pixDestroy(ref pix4);
-            NativeLeptonicaApiSignatures.pixDestroy(ref pix5);
+            TessApi.NativeLeptonica.pixDestroy(ref pix1);
+            TessApi.NativeLeptonica.pixDestroy(ref pix2);
+            TessApi.NativeLeptonica.pixDestroy(ref pix3);
+            TessApi.NativeLeptonica.pixDestroy(ref pix4);
+            TessApi.NativeLeptonica.pixDestroy(ref pix5);
 
             if (pix6 == IntPtr.Zero)
             {
@@ -866,7 +850,7 @@ namespace TesseractDotnetWrapper
         {
             float pAngle,
                 pConf;
-            var resultPixHandle = NativeLeptonicaApiSignatures.pixDeskewGeneral(
+            var resultPixHandle = TessApi.NativeLeptonica.pixDeskewGeneral(
                 handle,
                 sweep.Reduction,
                 sweep.Range,
@@ -932,12 +916,12 @@ namespace TesseractDotnetWrapper
             if (Math.Abs(rotations - Math.Floor(rotations)) < VerySmallAngle)
             {
                 // handle special case of orthoganal rotations (90, 180, 270)
-                resultHandle = NativeLeptonicaApiSignatures.pixRotateOrth(handle, (int)rotations);
+                resultHandle = TessApi.NativeLeptonica.pixRotateOrth(handle, (int)rotations);
             }
             else
             {
                 // handle general case
-                resultHandle = NativeLeptonicaApiSignatures.pixRotate(
+                resultHandle = TessApi.NativeLeptonica.pixRotate(
                     handle,
                     angleInRadians,
                     method,
@@ -960,7 +944,7 @@ namespace TesseractDotnetWrapper
         /// <returns>rotated image</returns>
         public Pix Rotate90(int direction)
         {
-            IntPtr resultHandle = NativeLeptonicaApiSignatures.pixRotate90(handle, direction);
+            IntPtr resultHandle = TessApi.NativeLeptonica.pixRotate90(handle, direction);
 
             if (resultHandle == IntPtr.Zero)
             {
@@ -975,7 +959,7 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public Pix Invert()
         {
-            IntPtr resultHandle = NativeLeptonicaApiSignatures.pixInvert(
+            IntPtr resultHandle = TessApi.NativeLeptonica.pixInvert(
                 new HandleRef(this, IntPtr.Zero),
                 handle
             );
@@ -994,7 +978,7 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public Pix ConvertTo8(int cmapflag)
         {
-            IntPtr resultHandle = NativeLeptonicaApiSignatures.pixConvertTo8(handle, cmapflag);
+            IntPtr resultHandle = TessApi.NativeLeptonica.pixConvertTo8(handle, cmapflag);
 
             if (resultHandle == IntPtr.Zero)
             {
@@ -1126,7 +1110,7 @@ namespace TesseractDotnetWrapper
         ///</remarks>
         public Pix Scale(float scaleX, float scaleY)
         {
-            IntPtr result = NativeLeptonicaApiSignatures.pixScale(handle, scaleX, scaleY);
+            IntPtr result = TessApi.NativeLeptonica.pixScale(handle, scaleX, scaleY);
 
             if (result == IntPtr.Zero)
                 throw new InvalidOperationException("Failed to scale pix.");
@@ -1141,7 +1125,7 @@ namespace TesseractDotnetWrapper
         protected override void Dispose(bool disposing)
         {
             var tmpHandle = handle.Handle;
-            NativeLeptonicaApiSignatures.pixDestroy(ref tmpHandle);
+            TessApi.NativeLeptonica.pixDestroy(ref tmpHandle);
             this.handle = new HandleRef(this, IntPtr.Zero);
         }
 

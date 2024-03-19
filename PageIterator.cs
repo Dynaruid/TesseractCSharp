@@ -32,7 +32,7 @@ namespace TesseractDotnetWrapper
             VerifyNotDisposed();
             if (handle.Handle != IntPtr.Zero)
             {
-                NativeTessApiSignatures.PageIteratorBegin(handle);
+                TessApi.NativeTess.PageIteratorBegin(handle);
             }
         }
 
@@ -49,7 +49,7 @@ namespace TesseractDotnetWrapper
             VerifyNotDisposed();
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return NativeTessApiSignatures.PageIteratorNext(handle, level) != 0;
+            return TessApi.NativeTess.PageIteratorNext(handle, level) != 0;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace TesseractDotnetWrapper
 
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return NativeTessApiSignatures.PageIteratorIsAtBeginningOf(handle, level) != 0;
+            return TessApi.NativeTess.PageIteratorIsAtBeginningOf(handle, level) != 0;
         }
 
         /// <summary>
@@ -102,8 +102,7 @@ namespace TesseractDotnetWrapper
 
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return NativeTessApiSignatures.PageIteratorIsAtFinalElement(handle, level, element)
-                != 0;
+            return TessApi.NativeTess.PageIteratorIsAtFinalElement(handle, level, element) != 0;
         }
 
         public PolyBlockType BlockType
@@ -114,7 +113,7 @@ namespace TesseractDotnetWrapper
 
                 if (handle.Handle == IntPtr.Zero)
                     return PolyBlockType.Unknown;
-                return NativeTessApiSignatures.PageIteratorBlockType(handle);
+                return TessApi.NativeTess.PageIteratorBlockType(handle);
             }
         }
 
@@ -126,7 +125,7 @@ namespace TesseractDotnetWrapper
                 return null;
             }
 
-            return Pix.Create(NativeTessApiSignatures.PageIteratorGetBinaryImage(handle, level));
+            return Pix.Create(TessApi.NativeTess.PageIteratorGetBinaryImage(handle, level));
         }
 
         public Pix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
@@ -141,7 +140,7 @@ namespace TesseractDotnetWrapper
             }
 
             return Pix.Create(
-                NativeTessApiSignatures.PageIteratorGetImage(
+                TessApi.NativeTess.PageIteratorGetImage(
                     handle,
                     level,
                     padding,
@@ -167,7 +166,7 @@ namespace TesseractDotnetWrapper
                 y2;
             if (
                 handle.Handle != IntPtr.Zero
-                && NativeTessApiSignatures.PageIteratorBoundingBox(
+                && TessApi.NativeTess.PageIteratorBoundingBox(
                     handle,
                     level,
                     out x1,
@@ -205,7 +204,7 @@ namespace TesseractDotnetWrapper
                 y2;
             if (
                 handle.Handle != IntPtr.Zero
-                && NativeTessApiSignatures.PageIteratorBaseline(
+                && TessApi.NativeTess.PageIteratorBaseline(
                     handle,
                     level,
                     out x1,
@@ -245,7 +244,7 @@ namespace TesseractDotnetWrapper
             WritingDirection writing_direction;
             TextLineOrder textLineOrder;
             float deskew_angle;
-            NativeTessApiSignatures.PageIteratorOrientation(
+            TessApi.NativeTess.PageIteratorOrientation(
                 handle,
                 out orientation,
                 out writing_direction,
@@ -265,7 +264,7 @@ namespace TesseractDotnetWrapper
         {
             if (handle.Handle != IntPtr.Zero)
             {
-                NativeTessApiSignatures.PageIteratorDelete(handle);
+                TessApi.NativeTess.PageIteratorDelete(handle);
             }
         }
     }

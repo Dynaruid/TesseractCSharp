@@ -228,7 +228,7 @@ namespace TesseractDotnetWrapper
                         );
 
                         // End the renderer
-                        NativeTessApiSignatures.ResultRendererEndDocument(_renderer._handle);
+                        TessApi.NativeTess.ResultRendererEndDocument(_renderer._handle);
                         _renderer._currentDocumentHandle = null;
                     }
                 }
@@ -282,7 +282,7 @@ namespace TesseractDotnetWrapper
             // implicitly if required. This is why I've only made Page.Recognise internal not public.
             page.Recognize();
 
-            return NativeTessApiSignatures.ResultRendererAddImage(Handle, page.Engine.Handle) != 0;
+            return TessApi.NativeTess.ResultRendererAddImage(Handle, page.Engine.Handle) != 0;
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace TesseractDotnetWrapper
             );
 
             IntPtr titlePtr = Marshal.StringToHGlobalAnsi(title);
-            if (NativeTessApiSignatures.ResultRendererBeginDocument(Handle, titlePtr) == 0)
+            if (TessApi.NativeTess.ResultRendererBeginDocument(Handle, titlePtr) == 0)
             {
                 // release the pointer first before throwing an error.
                 Marshal.FreeHGlobal(titlePtr);
@@ -326,7 +326,7 @@ namespace TesseractDotnetWrapper
             {
                 VerifyNotDisposed();
 
-                return NativeTessApiSignatures.ResultRendererImageNum(Handle);
+                return TessApi.NativeTess.ResultRendererImageNum(Handle);
             }
         }
 
@@ -348,7 +348,7 @@ namespace TesseractDotnetWrapper
             {
                 if (_handle.Handle != IntPtr.Zero)
                 {
-                    NativeTessApiSignatures.DeleteResultRenderer(_handle);
+                    TessApi.NativeTess.DeleteResultRenderer(_handle);
                     _handle = new HandleRef(this, IntPtr.Zero);
                 }
             }
@@ -359,7 +359,7 @@ namespace TesseractDotnetWrapper
     {
         public TextResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.TextRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.TextRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -368,7 +368,7 @@ namespace TesseractDotnetWrapper
     {
         public HOcrResultRenderer(string outputFilename, bool fontInfo = false)
         {
-            var rendererHandle = NativeTessApiSignatures.HOcrRendererCreate2(
+            var rendererHandle = TessApi.NativeTess.HOcrRendererCreate2(
                 outputFilename,
                 fontInfo ? 1 : 0
             );
@@ -380,7 +380,7 @@ namespace TesseractDotnetWrapper
     {
         public UnlvResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.UnlvRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.UnlvRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -389,7 +389,7 @@ namespace TesseractDotnetWrapper
     {
         public AltoResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.AltoRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.AltoRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -398,7 +398,7 @@ namespace TesseractDotnetWrapper
     {
         public TsvResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.TsvRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.TsvRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -407,7 +407,7 @@ namespace TesseractDotnetWrapper
     {
         public LSTMBoxResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.LSTMBoxRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.LSTMBoxRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -416,7 +416,7 @@ namespace TesseractDotnetWrapper
     {
         public WordStrBoxResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.WordStrBoxRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.WordStrBoxRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -425,7 +425,7 @@ namespace TesseractDotnetWrapper
     {
         public BoxResultRenderer(string outputFilename)
         {
-            var rendererHandle = NativeTessApiSignatures.BoxTextRendererCreate(outputFilename);
+            var rendererHandle = TessApi.NativeTess.BoxTextRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
@@ -437,7 +437,7 @@ namespace TesseractDotnetWrapper
         public PdfResultRenderer(string outputFilename, string fontDirectory, bool textonly)
         {
             var fontDirectoryHandle = Marshal.StringToHGlobalAnsi(fontDirectory);
-            var rendererHandle = NativeTessApiSignatures.PDFRendererCreate(
+            var rendererHandle = TessApi.NativeTess.PDFRendererCreate(
                 outputFilename,
                 fontDirectoryHandle,
                 textonly ? 1 : 0

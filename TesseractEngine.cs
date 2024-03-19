@@ -225,7 +225,7 @@ namespace TesseractDotnetWrapper
             Guard.RequireNotNullOrEmpty("language", language);
 
             DefaultPageSegMode = PageSegMode.Auto;
-            handle = new HandleRef(this, NativeTessApiSignatures.BaseApiCreate());
+            handle = new HandleRef(this, TessApi.NativeTess.BaseApiCreate());
 
             Initialise(
                 datapath,
@@ -339,11 +339,11 @@ namespace TesseractDotnetWrapper
             var actualPageSegmentMode = pageSegMode.HasValue
                 ? pageSegMode.Value
                 : DefaultPageSegMode;
-            NativeTessApiSignatures.BaseAPISetPageSegMode(handle, actualPageSegmentMode);
-            NativeTessApiSignatures.BaseApiSetImage(handle, image.Handle);
+            TessApi.NativeTess.BaseAPISetPageSegMode(handle, actualPageSegmentMode);
+            TessApi.NativeTess.BaseApiSetImage(handle, image.Handle);
             if (!String.IsNullOrEmpty(inputName))
             {
-                NativeTessApiSignatures.BaseApiSetInputName(handle, inputName);
+                TessApi.NativeTess.BaseApiSetInputName(handle, inputName);
             }
             var page = new Page(this, image, inputName, region, actualPageSegmentMode);
             page.Disposed += OnIteratorDisposed;
@@ -354,7 +354,7 @@ namespace TesseractDotnetWrapper
         {
             if (handle.Handle != IntPtr.Zero)
             {
-                NativeTessApiSignatures.BaseApiDelete(handle);
+                TessApi.NativeTess.BaseApiDelete(handle);
                 handle = new HandleRef(this, IntPtr.Zero);
             }
         }
@@ -517,7 +517,7 @@ namespace TesseractDotnetWrapper
         public bool TryGetBoolVariable(string name, out bool value)
         {
             int val;
-            if (NativeTessApiSignatures.BaseApiGetBoolVariable(handle, name, out val) != 0)
+            if (TessApi.NativeTess.BaseApiGetBoolVariable(handle, name, out val) != 0)
             {
                 value = (val != 0);
                 return true;
@@ -537,7 +537,7 @@ namespace TesseractDotnetWrapper
         /// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
         public bool TryGetDoubleVariable(string name, out double value)
         {
-            return NativeTessApiSignatures.BaseApiGetDoubleVariable(handle, name, out value) != 0;
+            return TessApi.NativeTess.BaseApiGetDoubleVariable(handle, name, out value) != 0;
         }
 
         /// <summary>
@@ -548,7 +548,7 @@ namespace TesseractDotnetWrapper
         /// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
         public bool TryGetIntVariable(string name, out int value)
         {
-            return NativeTessApiSignatures.BaseApiGetIntVariable(handle, name, out value) != 0;
+            return TessApi.NativeTess.BaseApiGetIntVariable(handle, name, out value) != 0;
         }
 
         /// <summary>
@@ -570,7 +570,7 @@ namespace TesseractDotnetWrapper
         /// <returns></returns>
         public bool TryPrintVariablesToFile(string filename)
         {
-            return NativeTessApiSignatures.BaseApiPrintVariablesToFile(handle, filename) != 0;
+            return TessApi.NativeTess.BaseApiPrintVariablesToFile(handle, filename) != 0;
         }
 
         #endregion Config

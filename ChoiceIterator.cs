@@ -25,7 +25,7 @@ namespace TesseractDotnetWrapper
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
                 return false;
-            return NativeTessApiSignatures.ChoiceIteratorNext(_handleRef) != 0;
+            return TessApi.NativeTess.ChoiceIteratorNext(_handleRef) != 0;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TesseractDotnetWrapper
             if (_handleRef.Handle == IntPtr.Zero)
                 return 0f;
 
-            return NativeTessApiSignatures.ChoiceIteratorGetConfidence(_handleRef);
+            return TessApi.NativeTess.ChoiceIteratorGetConfidence(_handleRef);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace TesseractDotnetWrapper
         {
             if (_handleRef.Handle != IntPtr.Zero)
             {
-                NativeTessApiSignatures.ChoiceIteratorDelete(_handleRef);
+                TessApi.NativeTess.ChoiceIteratorDelete(_handleRef);
             }
         }
     }

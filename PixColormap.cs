@@ -29,7 +29,7 @@ namespace TesseractDotnetWrapper
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
 
-            var handle = NativeLeptonicaApiSignatures.pixcmapCreate(depth);
+            var handle = TessApi.NativeLeptonica.pixcmapCreate(depth);
             if (handle == IntPtr.Zero)
             {
                 throw new InvalidOperationException("Failed to create colormap.");
@@ -49,7 +49,7 @@ namespace TesseractDotnetWrapper
                     "Depth must be 2 and 2^depth (inclusive)."
                 );
 
-            var handle = NativeLeptonicaApiSignatures.pixcmapCreateLinear(depth, levels);
+            var handle = TessApi.NativeLeptonica.pixcmapCreateLinear(depth, levels);
             if (handle == IntPtr.Zero)
             {
                 throw new InvalidOperationException("Failed to create colormap.");
@@ -64,7 +64,7 @@ namespace TesseractDotnetWrapper
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
 
-            var handle = NativeLeptonicaApiSignatures.pixcmapCreateRandom(
+            var handle = TessApi.NativeLeptonica.pixcmapCreateRandom(
                 depth,
                 firstIsBlack ? 1 : 0,
                 lastIsWhite ? 1 : 0
@@ -83,22 +83,22 @@ namespace TesseractDotnetWrapper
 
         public int Depth
         {
-            get { return NativeLeptonicaApiSignatures.pixcmapGetDepth(handle); }
+            get { return TessApi.NativeLeptonica.pixcmapGetDepth(handle); }
         }
 
         public int Count
         {
-            get { return NativeLeptonicaApiSignatures.pixcmapGetCount(handle); }
+            get { return TessApi.NativeLeptonica.pixcmapGetCount(handle); }
         }
 
         public int FreeCount
         {
-            get { return NativeLeptonicaApiSignatures.pixcmapGetFreeCount(handle); }
+            get { return TessApi.NativeLeptonica.pixcmapGetFreeCount(handle); }
         }
 
         public bool AddColor(PixColor color)
         {
-            return NativeLeptonicaApiSignatures.pixcmapAddColor(
+            return TessApi.NativeLeptonica.pixcmapAddColor(
                     handle,
                     color.Red,
                     color.Green,
@@ -108,7 +108,7 @@ namespace TesseractDotnetWrapper
 
         public bool AddNewColor(PixColor color, out int index)
         {
-            return NativeLeptonicaApiSignatures.pixcmapAddNewColor(
+            return TessApi.NativeLeptonica.pixcmapAddNewColor(
                     handle,
                     color.Red,
                     color.Green,
@@ -119,7 +119,7 @@ namespace TesseractDotnetWrapper
 
         public bool AddNearestColor(PixColor color, out int index)
         {
-            return NativeLeptonicaApiSignatures.pixcmapAddNearestColor(
+            return TessApi.NativeLeptonica.pixcmapAddNearestColor(
                     handle,
                     color.Red,
                     color.Green,
@@ -130,13 +130,12 @@ namespace TesseractDotnetWrapper
 
         public bool AddBlackOrWhite(int color, out int index)
         {
-            return NativeLeptonicaApiSignatures.pixcmapAddBlackOrWhite(handle, color, out index)
-                == 0;
+            return TessApi.NativeLeptonica.pixcmapAddBlackOrWhite(handle, color, out index) == 0;
         }
 
         public bool SetBlackOrWhite(bool setBlack, bool setWhite)
         {
-            return NativeLeptonicaApiSignatures.pixcmapSetBlackAndWhite(
+            return TessApi.NativeLeptonica.pixcmapSetBlackAndWhite(
                     handle,
                     setBlack ? 1 : 0,
                     setWhite ? 1 : 0
@@ -147,7 +146,7 @@ namespace TesseractDotnetWrapper
         {
             int usable;
             if (
-                NativeLeptonicaApiSignatures.pixcmapUsableColor(
+                TessApi.NativeLeptonica.pixcmapUsableColor(
                     handle,
                     color.Red,
                     color.Green,
@@ -166,7 +165,7 @@ namespace TesseractDotnetWrapper
 
         public void Clear()
         {
-            if (NativeLeptonicaApiSignatures.pixcmapClear(handle) != 0)
+            if (TessApi.NativeLeptonica.pixcmapClear(handle) != 0)
             {
                 throw new InvalidOperationException("Failed to clear color map.");
             }
@@ -177,7 +176,7 @@ namespace TesseractDotnetWrapper
             get
             {
                 int color;
-                if (NativeLeptonicaApiSignatures.pixcmapGetColor32(handle, index, out color) == 0)
+                if (TessApi.NativeLeptonica.pixcmapGetColor32(handle, index, out color) == 0)
                 {
                     return PixColor.FromRgb((uint)color);
                 }
@@ -189,7 +188,7 @@ namespace TesseractDotnetWrapper
             set
             {
                 if (
-                    NativeLeptonicaApiSignatures.pixcmapResetColor(
+                    TessApi.NativeLeptonica.pixcmapResetColor(
                         handle,
                         index,
                         value.Red,
@@ -206,7 +205,7 @@ namespace TesseractDotnetWrapper
         public void Dispose()
         {
             IntPtr tmpHandle = Handle.Handle;
-            NativeLeptonicaApiSignatures.pixcmapDestroy(ref tmpHandle);
+            TessApi.NativeLeptonica.pixcmapDestroy(ref tmpHandle);
             this.handle = new HandleRef(this, IntPtr.Zero);
         }
     }
