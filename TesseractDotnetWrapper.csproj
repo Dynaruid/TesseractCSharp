@@ -15,7 +15,7 @@
      <Content Include="tesseract\**\*" Pack="true" PackageCopyToOutput="true" PackagePath="tesseract">
        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
      </Content>
-     <None Include="docs\README.md" Pack="true" PackagePath="\"/>
+     <None Include="README.md" Pack="true" PackagePath="\"/>
      <None Include="..\Magick.NET-main\License.txt">
        <Pack>True</Pack>
        <PackagePath>\</PackagePath>
