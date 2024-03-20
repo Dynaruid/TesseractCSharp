@@ -34,6 +34,24 @@ You will also need to download the language data files for tesseract 4.0.0 or ab
 [tesseract-ocr]: https://github.com/tesseract-ocr/tesseract
 [tesseract-tessdata]: https://github.com/tesseract-ocr/tessdata/
 
+## License Information
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this software except in compliance with the License. You may obtain a copy of the License at:
+http://www.apache.org/licenses/LICENSE-2.0
+
+This project makes use of external libraries, each governed by its own license. It's important for users and contributors to be aware of these licenses and adhere to their terms. Below is a summary of the licensing for each major component along with a note on where to find detailed license details and conditions:
+
+### Leptonica 
+Incorporated in this project in binary form is the Leptonica library. Leptonica is licensed under the BSD 2-clause license. This license permits the use, modification, and distribution of the software, provided that the copyright notice and the license's conditions are included in all copies or substantial portions of the software. Detailed license details and conditions can be found on the [official Leptonica website](http://www.leptonica.org/) or [source repository](https://github.com/danbloomberg/leptonica).
+
+### Tesseract
+We utilize the Tesseract Optical Character Recognition (OCR) library in binary form, which is licensed under the Apache-2.0 license. The Apache-2.0 license is a permissive open-source license that allows for free use, modification, and distribution of the software, under the condition that copyright notice and the license itself are made available in any redistribution of the software or substantial parts of it. Detailed license details and conditions can be found on the [Tesseract GitHub page](https://github.com/tesseract-ocr/tesseract).
+
+### charlesw/tesseract
+The basis of our Tesseract implementation relies on the charlesw/tesseract library, which is also under the Apache-2.0 license. This consistency in licensing facilitates our use and modification of the Tesseract OCR technology within the guidelines of open-source software development. Detailed license details and conditions can be found on the [charlesw/tesseract GitHub page](https://github.com/charlesw/tesseract).
+
+Please ensure that you review and comply with the specific terms and conditions of these licenses when using, modifying, or distributing this project or its components.
+
 ## 감사의 글
 본 프로젝트는 [charlesw/tesseract](https://github.com/charlesw/tesseract) 라이브러리에 기반을 두고 있습니다. 원본 프로젝트의 기여자분들에게 감사드립니다.
 
