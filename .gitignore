@@ -20,7 +20,7 @@ bld/
 [Oo]ut/
 [Ll]og/
 [Ll]ogs/
-/example/bin
-/example/obj
-/src/TesseractDotnetWrapper/bin
-/src/TesseractDotnetWrapper/obj
+example/bin/
+example/obj/
+src/TesseractDotnetWrapper/bin/
+src/TesseractDotnetWrapper/obj/
