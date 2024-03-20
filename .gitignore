@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs
+
+/example/.bin
+/example/.obj
+/src/TesseractDotnetWrapper/.bin
+/src/TesseractDotnetWrapper/.obj
