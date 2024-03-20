@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "example/1.0.0": {
+        "dependencies": {
+          "TesseractDotnetWrapper": "1.0.0"
+        },
+        "runtime": {
+          "example.dll": {}
+        }
+      },
+      "TesseractDotnetWrapper/1.0.0": {
+        "runtime": {
+          "TesseractDotnetWrapper.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "example/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TesseractDotnetWrapper/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

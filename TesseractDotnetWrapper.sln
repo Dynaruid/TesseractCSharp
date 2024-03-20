@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesseractDotnetWrapper", "src\TesseractDotnetWrapper\TesseractDotnetWrapper.csproj", "{06C804D4-5790-415B-AB22-37DF7BC0EAA0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example", "example\example.csproj", "{644141B4-3FBF-4EC4-B663-F6E6E20B5193}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{06C804D4-5790-415B-AB22-37DF7BC0EAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C804D4-5790-415B-AB22-37DF7BC0EAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06C804D4-5790-415B-AB22-37DF7BC0EAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{644141B4-3FBF-4EC4-B663-F6E6E20B5193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644141B4-3FBF-4EC4-B663-F6E6E20B5193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644141B4-3FBF-4EC4-B663-F6E6E20B5193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644141B4-3FBF-4EC4-B663-F6E6E20B5193}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
