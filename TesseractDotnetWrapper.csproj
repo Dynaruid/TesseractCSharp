@@ -14,9 +14,5 @@
      </Content>
    
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-    <Folder Include="tesseract\macos_aarch64\" />
-  </ItemGroup>
 
 </Project>
