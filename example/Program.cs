@@ -11,8 +11,8 @@ try
 {
     using var engine = new TesseractEngine(@"./tessdata", "kor+eng", EngineMode.Default);
     using var img = Pix.LoadFromFile(testImagePath);
-    //"For images like receipts, you should use PageSegMode.SparseText."
-    //using var page = engine.Process(img, pageSegMode: PageSegMode.SparseText);
+    // For images like receipts, you should use PageSegMode.SparseText.
+    // using var page = engine.Process(img, pageSegMode: PageSegMode.SparseText);
     using var page = engine.Process(img, pageSegMode: null);
 
     var text = page.GetText();
