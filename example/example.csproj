@@ -11,7 +11,10 @@
     <ProjectReference Include="..\src\TesseractDotnetWrapper\TesseractDotnetWrapper.csproj" />
   </ItemGroup>
 
+
   <ItemGroup>
+    <Content Include="tessdata\**" />
+
     <None Update="images\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using TesseractDotnetWrapper;
-
-var testImagePath = "./images/kor_sample.jpg";
+string basePath = AppContext.BaseDirectory;
+var testImagePath = basePath + "/images/kor_sample.jpg";
 if (args.Length > 0)
 {
     testImagePath = args[0];
@@ -9,7 +9,7 @@ if (args.Length > 0)
 
 try
 {
-    using var engine = new TesseractEngine(@"./tessdata", "kor+eng", EngineMode.Default);
+    using var engine = new TesseractEngine(basePath + @"/tessdata", "kor+eng", EngineMode.Default);
     using var img = Pix.LoadFromFile(testImagePath);
     // For images like receipts, you should use PageSegMode.SparseText.
     // using var page = engine.Process(img, pageSegMode: PageSegMode.SparseText);
