@@ -9,12 +9,12 @@ This project is a modified version of the [charlesw/tesseract](https://github.co
 It aims to make the Tesseract OCR engine more effective in .NET environments.
 
 ## 개선 사항
-  런타임시간에 동적라이브러리를 환경별로 선택해 로드하는 대신 플랫폼들의 바이너리파일을 모두 포함하고 플랫폼별 코드를 구현했습니다.
-  이로 인해 .NET런타임의 최적화 및 AOT 빌드가 가능합니다.
+  .Net Core3.0 부터 제공되는 NativeLibrary를 사용하여 동적 시간에 플랫폼별 라이브러리를 로드하였습니다.
+  이로 인해 IL을 직접 구성하지 않아. NET런타임의 최적화 및 호환성을 더욱 확보했습니다.
 
 ## Enhancements
-  Instead of selecting and loading dynamic libraries based on the environment at runtime, we have included binaries for all platforms and implemented platform-specific code.
-  This enables optimizations for the .NET runtime and Ahead-of-Time (AOT) builds.
+  I used NativeLibrary, available from .Net Core 3.0, to load platform-specific libraries at runtime. 
+  This has enabled us to secure further optimization and compatibility with the .NET runtime without directly constructing IL.
 
 
 ## Supported platforms
