@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesseractDotnetWrapper", "src\TesseractDotnetWrapper\TesseractDotnetWrapper.csproj", "{06C804D4-5790-415B-AB22-37DF7BC0EAA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example", "example\example.csproj", "{644141B4-3FBF-4EC4-B663-F6E6E20B5193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example01", "example\Example01.csproj", "{644141B4-3FBF-4EC4-B663-F6E6E20B5193}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesseractCSharp", "TesseractCSharp\TesseractCSharp.csproj", "{F8622492-16A5-4FE0-96EB-51D73591A9AB}"
 EndProject
