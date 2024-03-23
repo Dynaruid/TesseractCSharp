@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl></PackageProjectUrl>
+    <Copyright>Apache-2.0 license</Copyright>
+    <RepositoryUrl>https://github.com/Dynaruid/TesseractCSharp</RepositoryUrl>
+    <PackageTags>ocr</PackageTags>
   </PropertyGroup>
 
 
