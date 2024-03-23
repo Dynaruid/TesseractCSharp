@@ -7,13 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\src\TesseractDotnetWrapper\TesseractDotnetWrapper.csproj" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <Content Include="tessdata\**" />
+    <ProjectReference Include="..\TesseractCSharp\TesseractCSharp.csproj" />
 
     <None Update="images\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

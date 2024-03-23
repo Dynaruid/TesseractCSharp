@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
-using TesseractDotnetWrapper;
+using TesseractCSharp;
+
+
 string basePath = AppContext.BaseDirectory;
 var testImagePath = basePath + "/images/kor_sample.jpg";
 if (args.Length > 0)
