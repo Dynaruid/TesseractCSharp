@@ -4,15 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    
+
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.4</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <Copyright>Apache-2.0 license</Copyright>
     <RepositoryUrl>https://github.com/Dynaruid/TesseractCSharp</RepositoryUrl>
     <PackageTags>ocr</PackageTags>
+    <Description>.NET wrapper for Tesseract that has enhanced cross-platform support.</Description>
   </PropertyGroup>
 
 
@@ -22,7 +24,10 @@
     </Content>
     <None Include="README.md" Pack="true" PackagePath="\" />
     <None Include="LICENSE" Pack="true" PackagePath="\" />
-
+    <Content Include="TesseractCSharp.targets" Pack="true" PackageCopyToOutput="true"
+      PackagePath="build/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

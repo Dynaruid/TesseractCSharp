@@ -1,0 +1,11 @@
+<Project>
+  <Target Name="CopyTesseract" AfterTargets="Build">
+    <ItemGroup>
+      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\**\*" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(TesseractFiles)"
+      DestinationFiles="@(TesseractFiles->'$(OutputPath)\tesseract\%(RecursiveDir)%(Filename)%(Extension)')"
+    />
+  </Target>
+</Project>
