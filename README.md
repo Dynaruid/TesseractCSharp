@@ -1,4 +1,4 @@
-# TesseractDotnetWrapper
+# TesseractCSharp
 
 A .NET wrapper for [tesseract-ocr] 5.3.4.
 
