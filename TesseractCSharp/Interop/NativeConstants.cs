@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace TesseractCSharp.Interop
@@ -9,13 +8,23 @@ namespace TesseractCSharp.Interop
     /// </summary>
     public static class NativeConstants
     {
-        public static bool NativeImported = false;
+        private static string BaseLibraryPath = string.Empty;
+        private static bool NativeImported = false;
+        private static readonly char sep = Path.DirectorySeparatorChar;
+
+        public static void InitBaseLibraryPath(string baseLibraryPath)
+        {
+            BaseLibraryPath = baseLibraryPath + sep;
+        }
 
         public static void InitNativeLoader()
         {
             if (NativeImported == false)
             {
-                NativeLibrary.SetDllImportResolver(typeof(NativeConstants).Assembly, DllImportResolver);
+                NativeLibrary.SetDllImportResolver(
+                    typeof(NativeConstants).Assembly,
+                    DllImportResolver
+                );
                 NativeImported = true;
             }
         }
@@ -32,21 +41,26 @@ namespace TesseractCSharp.Interop
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 //windows
-                currentTesseractLibraryName = NativeConstants.TesseractWinX64DllName;
-                currentLeptonicaLibraryName = NativeConstants.LeptonicaWinX64DllName;
-
+                currentTesseractLibraryName =
+                    BaseLibraryPath + NativeConstants.TesseractWinX64DllName;
+                currentLeptonicaLibraryName =
+                    BaseLibraryPath + NativeConstants.LeptonicaWinX64DllName;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 //macos
-                currentTesseractLibraryName = NativeConstants.TesseractMacosAArch64DllName;
-                currentLeptonicaLibraryName = NativeConstants.LeptonicaMacosAArch64DllName;
+                currentTesseractLibraryName =
+                    BaseLibraryPath + NativeConstants.TesseractMacosAArch64DllName;
+                currentLeptonicaLibraryName =
+                    BaseLibraryPath + NativeConstants.LeptonicaMacosAArch64DllName;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 //linux
-                currentTesseractLibraryName = NativeConstants.TesseractLinuxX64DllName;
-                currentLeptonicaLibraryName = NativeConstants.LeptonicaLinuxX64DllName;
+                currentTesseractLibraryName =
+                    BaseLibraryPath + NativeConstants.TesseractLinuxX64DllName;
+                currentLeptonicaLibraryName =
+                    BaseLibraryPath + NativeConstants.LeptonicaLinuxX64DllName;
             }
             if (libraryName == "NativeTessApi")
             {
@@ -56,23 +70,30 @@ namespace TesseractCSharp.Interop
             {
                 return NativeLibrary.Load(currentLeptonicaLibraryName, assembly, searchPath);
             }
+            else if (libraryName == "Magick.Native-Q8-x64.dll")
+            {
+                Console.WriteLine("magick load");
+                return NativeLibrary.Load(BaseLibraryPath + "Magick.Native-Q8-x64.dll", assembly, searchPath);
+            }
 
             // Otherwise, fallback to default import resolver.
             return IntPtr.Zero;
         }
 
-        public const string TesseractWinX64DllName = "tesseract/win_x64/tesseract53.dll";
-        public const string LeptonicaWinX64DllName = "tesseract/win_x64/leptonica-1.84.1.dll";
+        private static readonly string TesseractWinX64DllName =
+            "tesseract" + sep + "win_x64" + sep + "tesseract53.dll";
+        private static readonly string LeptonicaWinX64DllName =
+            "tesseract" + sep + "win_x64" + sep + "leptonica-1.84.1.dll";
 
-        public const string TesseractMacosAArch64DllName =
-                    "tesseract/macos_aarch64/libtesseract.5.3.4.dylib";
-        public const string LeptonicaMacosAArch64DllName =
-            "tesseract/macos_aarch64/libleptonica.6.0.0.dylib";
+        private static readonly string TesseractMacosAArch64DllName =
+            "tesseract" + sep + "macos_aarch64" + sep + "libtesseract.5.3.4.dylib";
+        private static readonly string LeptonicaMacosAArch64DllName =
+            "tesseract" + sep + "macos_aarch64" + sep + "libleptonica.6.0.0.dylib";
 
-        public const string TesseractLinuxX64DllName = "tesseract/linux_x64/libtesseract.so.5.3.4";
-        public const string LeptonicaLinuxX64DllName = "tesseract/linux_x64/libleptonica.so.6.0.0";
-
-
+        private static readonly string TesseractLinuxX64DllName =
+            "tesseract" + sep + "linux_x64" + sep + "libtesseract.so.5.3.4";
+        private static readonly string LeptonicaLinuxX64DllName =
+            "tesseract" + sep + "linux_x64" + sep + "libleptonica.so.6.0.0";
 
         // tesseract uses an int to represent true false values.
         public const int TRUE = 1;

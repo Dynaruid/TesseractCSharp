@@ -41,8 +41,7 @@ namespace TesseractCSharp
                 new string[0],
                 new Dictionary<string, object>(),
                 false
-            )
-        { }
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="configFile"/>
@@ -73,8 +72,7 @@ namespace TesseractCSharp
                 configFile != null ? new[] { configFile } : new string[0],
                 new Dictionary<string, object>(),
                 false
-            )
-        { }
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="configFiles"/>
@@ -102,8 +100,7 @@ namespace TesseractCSharp
                 configFiles,
                 new Dictionary<string, object>(),
                 false
-            )
-        { }
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/>.
@@ -127,8 +124,7 @@ namespace TesseractCSharp
                 new string[0],
                 new Dictionary<string, object>(),
                 false
-            )
-        { }
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/> and <paramref name="configFile"/>.
@@ -151,6 +147,8 @@ namespace TesseractCSharp
         /// An optional tesseract configuration file that is encoded using UTF8 without BOM
         /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
         /// </param>
+        ///
+
         public TesseractEngine(
             string datapath,
             string language,
@@ -164,8 +162,7 @@ namespace TesseractCSharp
                 configFile != null ? new[] { configFile } : new string[0],
                 new Dictionary<string, object>(),
                 false
-            )
-        { }
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/> and <paramref name="configFiles"/>.
@@ -198,8 +195,7 @@ namespace TesseractCSharp
                 configFiles,
                 new Dictionary<string, object>(),
                 false
-            )
-        { }
+            ) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> with the specified <paramref name="engineMode"/> and <paramref name="configFiles"/>.
