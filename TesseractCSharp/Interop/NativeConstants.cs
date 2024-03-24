@@ -70,11 +70,6 @@ namespace TesseractCSharp.Interop
             {
                 return NativeLibrary.Load(currentLeptonicaLibraryName, assembly, searchPath);
             }
-            else if (libraryName == "Magick.Native-Q8-x64.dll")
-            {
-                Console.WriteLine("magick load");
-                return NativeLibrary.Load(BaseLibraryPath + "Magick.Native-Q8-x64.dll", assembly, searchPath);
-            }
 
             // Otherwise, fallback to default import resolver.
             return IntPtr.Zero;
