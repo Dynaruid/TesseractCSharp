@@ -20,12 +20,6 @@
 
   <Import Project="TesseractCSharp.targets" />
   <ItemGroup>
-    <!--
-    <Content Include="tesseractLib\**\*" Pack="true" PackageCopyToOutput="true" PackagePath="tesseractLib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    -->
-
     <Content Include="tesseractLib\**\*" Pack="true" PackageCopyToOutput="true" PackagePath="tesseractLib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
