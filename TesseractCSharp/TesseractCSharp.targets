@@ -1,26 +1,39 @@
 <Project>
 
   <Target Name="CopyTesseractLib" AfterTargets="Build">
-    <!-- Windows x64용 파일 -->
-    <ItemGroup
-      Condition="'$([System.OperatingSystem]::IsWindows())' == 'true' and '$(Platform)' == 'x64'">
-      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\win_x64\**\*" />
+    <ItemGroup>
+      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseractLib\**\*" />
     </ItemGroup>
-
-    <!-- Linux x64용 파일 -->
-    <ItemGroup
-      Condition="'$([System.OperatingSystem]::IsLinux())' == 'true' and '$(Platform)' == 'x64'">
-      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\linux_x64\**\*" />
-    </ItemGroup>
-
-    <!-- macOS용 파일 -->
-    <ItemGroup Condition="'$([System.OperatingSystem]::IsMacOS())' == 'true'">
-      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\macos_aarch64\**\*" />
-    </ItemGroup>
-
     <Copy
       SourceFiles="@(TesseractFiles)"
-      DestinationFiles="@(TesseractFiles->'$(OutputPath)\tesseract\%(RecursiveDir)%(Filename)%(Extension)')"
+      DestinationFiles="@(TesseractFiles->'$(OutputPath)\tesseractLib\%(RecursiveDir)%(Filename)%(Extension)')"
     />
+
+
+    <ItemGroup
+      Condition="'$([System.OperatingSystem]::IsWindows())' == 'true' and '$(Platform)' == 'x64'">
+      <NativeLibsToDelete Include="$(OutputPath)\tesseractLib\linux_x64\*" />
+      <NativeLibsToDelete Include="$(OutputPath)\tesseractLib\macos_aarch64\*" />
+    </ItemGroup>
+    <ItemGroup
+      Condition="'$([System.OperatingSystem]::IsLinux())' == 'true' and '$(Platform)' == 'x64'">
+      <NativeLibsToDelete Include="$(OutputPath)\tesseractLib\win_x64\*" />
+      <NativeLibsToDelete Include="$(OutputPath)\tesseractLib\macos_aarch64\*" />
+    </ItemGroup>
+    <ItemGroup Condition="'$([System.OperatingSystem]::IsMacOS())' == 'true'">
+      <NativeLibsToDelete Include="$(OutputPath)\tesseractLib\win_x64\*" />
+      <NativeLibsToDelete Include="$(OutputPath)\tesseractLib\linux_x64\*" />
+    </ItemGroup>
+
+    <Delete
+      Files="@(NativeLibsToDelete)"
+      TreatErrorsAsWarnings="true" />
+    <Exec Condition="'$([System.OperatingSystem]::IsWindows())' == 'true'"
+      Command="powershell -Command &quot;Get-ChildItem -Path $(OutputPath)\tesseractLib -Recurse -Directory | Where-Object { $_.GetFileSystemInfos().Count -eq 0 } | Remove-Item&quot;" />
+    <Exec
+      Condition="'$([System.OperatingSystem]::IsLinux())' == 'true' or '$([System.OperatingSystem]::IsMacOS())' == 'true'"
+      Command="find $(OutputPath)/tesseractLib -type d -empty -delete" />
+
+    <Message Text="build done." Importance="high" />
   </Target>
 </Project>

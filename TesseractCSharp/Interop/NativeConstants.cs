@@ -76,19 +76,19 @@ namespace TesseractCSharp.Interop
         }
 
         private static readonly string TesseractWinX64DllName =
-            "tesseract" + sep + "win_x64" + sep + "tesseract53.dll";
+            "tesseractLib" + sep + "win_x64" + sep + "tesseract53.dll";
         private static readonly string LeptonicaWinX64DllName =
-            "tesseract" + sep + "win_x64" + sep + "leptonica-1.84.1.dll";
+            "tesseractLib" + sep + "win_x64" + sep + "leptonica-1.84.1.dll";
 
         private static readonly string TesseractMacosAArch64DllName =
-            "tesseract" + sep + "macos_aarch64" + sep + "libtesseract.5.3.4.dylib";
+            "tesseractLib" + sep + "macos_aarch64" + sep + "libtesseract.5.3.4.dylib";
         private static readonly string LeptonicaMacosAArch64DllName =
-            "tesseract" + sep + "macos_aarch64" + sep + "libleptonica.6.0.0.dylib";
+            "tesseractLib" + sep + "macos_aarch64" + sep + "libleptonica.6.0.0.dylib";
 
         private static readonly string TesseractLinuxX64DllName =
-            "tesseract" + sep + "linux_x64" + sep + "libtesseract.so.5.3.4";
+            "tesseractLib" + sep + "linux_x64" + sep + "libtesseract.so.5.3.4";
         private static readonly string LeptonicaLinuxX64DllName =
-            "tesseract" + sep + "linux_x64" + sep + "libleptonica.so.6.0.0";
+            "tesseractLib" + sep + "linux_x64" + sep + "libleptonica.so.6.0.0";
 
         // tesseract uses an int to represent true false values.
         public const int TRUE = 1;
