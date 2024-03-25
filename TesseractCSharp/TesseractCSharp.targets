@@ -1,8 +1,23 @@
 <Project>
-  <Target Name="CopyTesseract" AfterTargets="Build">
-    <ItemGroup>
-      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\**\*" />
+
+  <Target Name="CopyTesseractLib" AfterTargets="Build">
+    <!-- Windows x64용 파일 -->
+    <ItemGroup
+      Condition="'$([System.OperatingSystem]::IsWindows())' == 'true' and '$(Platform)' == 'x64'">
+      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\win_x64\**\*" />
     </ItemGroup>
+
+    <!-- Linux x64용 파일 -->
+    <ItemGroup
+      Condition="'$([System.OperatingSystem]::IsLinux())' == 'true' and '$(Platform)' == 'x64'">
+      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\linux_x64\**\*" />
+    </ItemGroup>
+
+    <!-- macOS용 파일 -->
+    <ItemGroup Condition="'$([System.OperatingSystem]::IsMacOS())' == 'true'">
+      <TesseractFiles Include="$(MSBuildThisFileDirectory)\..\tesseract\macos_aarch64\**\*" />
+    </ItemGroup>
+
     <Copy
       SourceFiles="@(TesseractFiles)"
       DestinationFiles="@(TesseractFiles->'$(OutputPath)\tesseract\%(RecursiveDir)%(Filename)%(Extension)')"
