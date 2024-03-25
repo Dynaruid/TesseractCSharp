@@ -26,3 +26,4 @@ example/obj/
 src/TesseractDotnetWrapper/bin/
 src/TesseractDotnetWrapper/obj/
 TesseractCSharp/Properties/PublishProfiles/FolderProfile.pubxml.user
+TesseractCSharp/TesseractCSharp.csproj.user
