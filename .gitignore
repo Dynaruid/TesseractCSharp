@@ -5,7 +5,6 @@
 /.vs
 /.config
 
-
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -23,7 +22,5 @@ bld/
 [Ll]ogs/
 example/bin/
 example/obj/
-src/TesseractDotnetWrapper/bin/
-src/TesseractDotnetWrapper/obj/
 TesseractCSharp/Properties/PublishProfiles/FolderProfile.pubxml.user
 TesseractCSharp/TesseractCSharp.csproj.user
